@@ -36,7 +36,6 @@ import static com.yhao.floatwindow.Rom.isIntentAvailable;
  * 跟Android版本无关，跟MIUI版本无关，addView方法也不报错
  * 所以最后对小米6.0以上的适配方法是：不使用 TYPE_TOAST 类型，统一申请权限
  */
-
 class Miui {
 
     private static final String miui = "ro.miui.ui.version.name";
@@ -76,6 +75,7 @@ class Miui {
                     }
                     mPermissionListenerList.clear();
                 }
+
                 @Override
                 public void onFail() {
                     for (PermissionListener listener : mPermissionListenerList) {

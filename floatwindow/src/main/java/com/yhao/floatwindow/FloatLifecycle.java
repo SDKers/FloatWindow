@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
-import android.widget.Toast;
 
 /**
  * Created by yhao on 17-12-1.
@@ -18,7 +17,6 @@ import android.widget.Toast;
  * 2.监听home键，从而及时隐藏
  * 3.resumeCount计时，针对一些只执行onPause不执行onStop的奇葩情况
  */
-
 class FloatLifecycle extends BroadcastReceiver implements Application.ActivityLifecycleCallbacks {
 
     private static final String SYSTEM_DIALOG_REASON_KEY = "reason";

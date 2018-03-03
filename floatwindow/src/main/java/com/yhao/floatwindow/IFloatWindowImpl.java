@@ -15,7 +15,6 @@ import android.view.animation.DecelerateInterpolator;
  * Created by yhao on 2017/12/22.
  * https://github.com/yhaolpz
  */
-
 public class IFloatWindowImpl extends IFloatWindow {
 
 
@@ -34,7 +33,7 @@ public class IFloatWindowImpl extends IFloatWindow {
     IFloatWindowImpl(FloatWindow.B b) {
         mB = b;
         if (mB.mMoveType == MoveType.fixed) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
+            if (Build.VERSION.SDK_INT >= 25) {
                 mFloatView = new FloatPhone(b.mApplicationContext);
             } else {
                 mFloatView = new FloatToast(b.mApplicationContext);
@@ -87,7 +86,7 @@ public class IFloatWindowImpl extends IFloatWindow {
     }
 
     @Override
-    void dismiss() {
+    public void dismiss() {
         mFloatView.dismiss();
         isShow = false;
     }
@@ -145,7 +144,7 @@ public class IFloatWindowImpl extends IFloatWindow {
 
     private void checkMoveType() {
         if (mB.mMoveType == MoveType.fixed) {
-            throw new IllegalArgumentException("FloatWindow of this tag is not allowed to move!");
+            LogUtil.e("FloatWindow of this tag is not allowed to move!");
         }
     }
 

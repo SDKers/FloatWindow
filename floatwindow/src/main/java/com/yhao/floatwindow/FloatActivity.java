@@ -1,5 +1,6 @@
 package com.yhao.floatwindow;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -7,7 +8,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.support.annotation.RequiresApi;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +16,6 @@ import java.util.List;
  * 用于在内部自动申请权限
  * https://github.com/yhaolpz
  */
-
 public class FloatActivity extends Activity {
 
     private static List<PermissionListener> mPermissionListenerList;
@@ -31,7 +30,7 @@ public class FloatActivity extends Activity {
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.M)
+    @TargetApi(23)
     private void requestAlertWindowPermission() {
         Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION);
         intent.setData(Uri.parse("package:" + getPackageName()));

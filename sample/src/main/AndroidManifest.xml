@@ -5,11 +5,11 @@
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
     <application
+        android:name="com.example.yhao.floatwindow.BaseApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
-        android:name="com.example.yhao.floatwindow.BaseApplication"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name="com.example.yhao.floatwindow.A_Activity">
@@ -21,7 +21,7 @@
         </activity>
         <activity android:name="com.example.yhao.floatwindow.B_Activity" />
         <activity android:name="com.example.yhao.floatwindow.C_Activity" />
-        <activity android:name="com.example.yhao.floatwindow.BaseActivity"/>
+        <activity android:name="com.example.yhao.floatwindow.BaseActivity" />
     </application>
 
 </manifest>

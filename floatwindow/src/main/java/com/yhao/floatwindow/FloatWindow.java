@@ -4,8 +4,8 @@ import android.animation.TimeInterpolator;
 import android.content.Context;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.MainThread;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +17,6 @@ import java.util.Map;
  * Created by yhao on 2017/12/22.
  * https://github.com/yhaolpz
  */
-
 public class FloatWindow {
 
     private FloatWindow() {
@@ -26,19 +25,24 @@ public class FloatWindow {
 
     private static final String mDefaultTag = "default_float_window_tag";
     private static Map<String, IFloatWindow> mFloatWindowMap;
+    public static Map<String, B> mMap = new HashMap<String, B>();
+
 
     public static IFloatWindow get() {
         return get(mDefaultTag);
     }
 
-    public static IFloatWindow get(@NonNull String tag) {
+    public static IFloatWindow get(String tag) {
+        if (mMap.containsKey(tag)) {
+            mMap.get(tag).build();
+        }
         return mFloatWindowMap == null ? null : mFloatWindowMap.get(tag);
     }
 
     private static B mBuilder = null;
 
     @MainThread
-    public static B with(@NonNull Context applicationContext) {
+    public static B with(Context applicationContext) {
         return mBuilder = new B(applicationContext);
     }
 
@@ -69,73 +73,143 @@ public class FloatWindow {
         long mDuration = 300;
         TimeInterpolator mInterpolator;
         private String mTag = mDefaultTag;
-         boolean mDesktopShow;
+        boolean mDesktopShow;
+
 
         private B() {
-
         }
 
         B(Context applicationContext) {
             mApplicationContext = applicationContext;
         }
 
-        public B setView(@NonNull View view) {
+        public B setView(View view) {
             mView = view;
+            if (!TextUtils.isEmpty(mTag)) {
+                if (mMap.containsKey(mTag)) {
+                    B temp = mMap.get(mTag);
+                    temp.mView = view;
+                }
+            }
             return this;
         }
 
         public B setView(@LayoutRes int layoutId) {
             mLayoutId = layoutId;
+            if (!TextUtils.isEmpty(mTag)) {
+                if (mMap.containsKey(mTag)) {
+                    B temp = mMap.get(mTag);
+                    temp.mLayoutId = layoutId;
+                }
+            }
             return this;
         }
 
         public B setWidth(int width) {
             mWidth = width;
+            if (!TextUtils.isEmpty(mTag)) {
+                if (mMap.containsKey(mTag)) {
+                    B temp = mMap.get(mTag);
+                    temp.mWidth = width;
+                }
+            }
             return this;
         }
 
         public B setHeight(int height) {
             mHeight = height;
+            if (!TextUtils.isEmpty(mTag)) {
+                if (mMap.containsKey(mTag)) {
+                    B temp = mMap.get(mTag);
+                    temp.mHeight = height;
+                }
+            }
             return this;
         }
 
         public B setWidth(@Screen.screenType int screenType, float ratio) {
-            mWidth = (int) ((screenType == Screen.width ?
+            int width = (int) ((screenType == Screen.width ?
                     Util.getScreenWidth(mApplicationContext) :
                     Util.getScreenHeight(mApplicationContext)) * ratio);
+            mWidth = width;
+
+            if (!TextUtils.isEmpty(mTag)) {
+                if (mMap.containsKey(mTag)) {
+                    B temp = mMap.get(mTag);
+                    temp.mWidth = width;
+                }
+            }
             return this;
         }
 
 
         public B setHeight(@Screen.screenType int screenType, float ratio) {
-            mHeight = (int) ((screenType == Screen.width ?
+
+            int height = (int) ((screenType == Screen.width ?
                     Util.getScreenWidth(mApplicationContext) :
                     Util.getScreenHeight(mApplicationContext)) * ratio);
+            mHeight = height;
+
+            if (!TextUtils.isEmpty(mTag)) {
+                if (mMap.containsKey(mTag)) {
+                    B temp = mMap.get(mTag);
+                    temp.mHeight = height;
+                }
+            }
             return this;
         }
 
 
         public B setX(int x) {
             xOffset = x;
+            if (!TextUtils.isEmpty(mTag)) {
+                if (mMap.containsKey(mTag)) {
+                    B temp = mMap.get(mTag);
+                    temp.xOffset = x;
+                }
+            }
             return this;
         }
 
         public B setY(int y) {
             yOffset = y;
+            if (!TextUtils.isEmpty(mTag)) {
+                if (mMap.containsKey(mTag)) {
+                    B temp = mMap.get(mTag);
+                    temp.yOffset = y;
+                }
+            }
             return this;
         }
 
         public B setX(@Screen.screenType int screenType, float ratio) {
-            xOffset = (int) ((screenType == Screen.width ?
+            int x = (int) ((screenType == Screen.width ?
                     Util.getScreenWidth(mApplicationContext) :
                     Util.getScreenHeight(mApplicationContext)) * ratio);
+            xOffset = x;
+
+            if (!TextUtils.isEmpty(mTag)) {
+                if (mMap.containsKey(mTag)) {
+                    B temp = mMap.get(mTag);
+                    temp.xOffset = x;
+                }
+            }
             return this;
         }
 
         public B setY(@Screen.screenType int screenType, float ratio) {
-            yOffset = (int) ((screenType == Screen.width ?
+            int y = (int) ((screenType == Screen.width ?
                     Util.getScreenWidth(mApplicationContext) :
                     Util.getScreenHeight(mApplicationContext)) * ratio);
+            yOffset = y;
+
+
+            if (!TextUtils.isEmpty(mTag)) {
+                if (mMap.containsKey(mTag)) {
+                    B temp = mMap.get(mTag);
+                    temp.yOffset = y;
+                }
+            }
             return this;
         }
 
@@ -146,31 +220,88 @@ public class FloatWindow {
          * @param show       　过滤类型,子类类型也会生效
          * @param activities 　过滤界面
          */
-        public B setFilter(boolean show, @NonNull Class... activities) {
+        public B setFilter(boolean show, Class... activities) {
             mShow = show;
             mActivities = activities;
+
+            if (!TextUtils.isEmpty(mTag)) {
+                if (mMap.containsKey(mTag)) {
+                    B temp = mMap.get(mTag);
+                    temp.mShow = show;
+                    temp.mActivities = activities;
+                }
+            }
             return this;
         }
 
-
+        /**
+         * 可拖动悬浮窗
+         *
+         * @param moveType
+         * @return
+         */
         public B setMoveType(@MoveType.MOVE_TYPE int moveType) {
             mMoveType = moveType;
+            if (!TextUtils.isEmpty(mTag)) {
+                if (mMap.containsKey(mTag)) {
+                    B temp = mMap.get(mTag);
+                    temp.mMoveType = moveType;
+                }
+            }
             return this;
         }
 
+        /**
+         * 自定义动画效果，只在 MoveType.slide 或 MoveType.back 模式下设置此项才有意义。
+         * 默认减速插值器，默认动画时长为 300ms。
+         * setMoveStyle(500, new AccelerateInterpolator()) 为贴边动画时长为500ms，加速插值器
+         *
+         * @param duration
+         * @param interpolator
+         * @return
+         */
         public B setMoveStyle(long duration, @Nullable TimeInterpolator interpolator) {
             mDuration = duration;
             mInterpolator = interpolator;
+            if (!TextUtils.isEmpty(mTag)) {
+                if (mMap.containsKey(mTag)) {
+                    B temp = mMap.get(mTag);
+                    temp.mDuration = duration;
+                    temp.mInterpolator = interpolator;
+                }
+            }
             return this;
         }
 
-        public B setTag(@NonNull String tag) {
+        /**
+         * 唯一标志.用于控制展示和隐藏
+         *
+         * @param tag
+         * @return
+         */
+        public B setTag(String tag) {
             mTag = tag;
+            if (!mMap.containsKey(mTag)) {
+                mMap.put(mTag, this);
+            }
             return this;
         }
 
+        /**
+         * 桌面显示.默认false
+         *
+         * @param show
+         * @return
+         */
         public B setDesktopShow(boolean show) {
             mDesktopShow = show;
+
+            if (!TextUtils.isEmpty(mTag)) {
+                if (mMap.containsKey(mTag)) {
+                    B temp = mMap.get(mTag);
+                    temp.mDesktopShow = show;
+                }
+            }
             return this;
         }
 
@@ -179,16 +310,21 @@ public class FloatWindow {
                 mFloatWindowMap = new HashMap<>();
             }
             if (mFloatWindowMap.containsKey(mTag)) {
-                throw new IllegalArgumentException("FloatWindow of this tag has been added, Please set a new tag for the new FloatWindow");
+                LogUtil.e("已经有同名的悬浮窗");
+            } else {
+                if (mView == null && mLayoutId == 0) {
+                    // throw new IllegalArgumentException("View has not been set!");
+                    LogUtil.e("没有设置界面，请注意检查!");
+                } else {
+                    if (mView == null) {
+                        mView = Util.inflate(mApplicationContext, mLayoutId);
+                    }
+                    IFloatWindow floatWindowImpl = new IFloatWindowImpl(this);
+                    mFloatWindowMap.put(mTag, floatWindowImpl);
+                }
+
             }
-            if (mView == null && mLayoutId == 0) {
-                throw new IllegalArgumentException("View has not been set!");
-            }
-            if (mView == null) {
-                mView = Util.inflate(mApplicationContext, mLayoutId);
-            }
-            IFloatWindow floatWindowImpl = new IFloatWindowImpl(this);
-            mFloatWindowMap.put(mTag, floatWindowImpl);
+
         }
 
     }

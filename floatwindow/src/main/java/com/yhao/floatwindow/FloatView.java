@@ -6,7 +6,6 @@ import android.view.View;
  * Created by yhao on 17-11-14.
  * https://github.com/yhaolpz
  */
-
 abstract class FloatView {
 
     abstract void setSize(int width, int height);

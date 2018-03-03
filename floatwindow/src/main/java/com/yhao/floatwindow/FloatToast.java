@@ -12,7 +12,6 @@ import java.lang.reflect.Method;
  * 自定义 toast 方式，无需申请权限
  * 当前版本暂时用 TYPE_TOAST 代替，后续版本可能会再融入此方式
  */
-
 class FloatToast extends FloatView {
 
 

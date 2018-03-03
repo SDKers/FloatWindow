@@ -10,7 +10,6 @@ import android.view.WindowManager;
  * Created by yhao on 17-11-14.
  * https://github.com/yhaolpz
  */
-
 class FloatPhone extends FloatView {
 
     private final Context mContext;
@@ -52,7 +51,7 @@ class FloatPhone extends FloatView {
     public void init() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
             req();
-        } else if (Miui.rom()) {
+        } else if (Miui.rom() || DeviceType.isOppo()) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 req();
             } else {

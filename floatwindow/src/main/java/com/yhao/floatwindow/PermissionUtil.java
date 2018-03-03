@@ -16,11 +16,10 @@ import java.lang.reflect.Method;
  * Created by yhao on 2017/12/29.
  * https://github.com/yhaolpz
  */
-
 class PermissionUtil {
 
     static boolean hasPermission(Context context) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        if (Build.VERSION.SDK_INT >= 23) {
             return Settings.canDrawOverlays(context);
         } else {
             return hasPermissionBelowMarshmallow(context);
@@ -28,10 +27,10 @@ class PermissionUtil {
     }
 
     static boolean hasPermissionOnActivityResult(Context context) {
-        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.O) {
+        if (Build.VERSION.SDK_INT == 26) {
             return hasPermissionForO(context);
         }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        if (Build.VERSION.SDK_INT >= 23) {
             return Settings.canDrawOverlays(context);
         } else {
             return hasPermissionBelowMarshmallow(context);

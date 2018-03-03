@@ -12,7 +12,6 @@ import java.io.InputStreamReader;
  * Created by yhao on 2017/12/30.
  * https://github.com/yhaolpz
  */
-
 class Rom {
 
     static boolean isIntentAvailable(Intent intent, Context context) {
