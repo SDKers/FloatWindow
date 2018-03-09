@@ -2,6 +2,7 @@ package com.yhao.floatwindow;
 
 import android.animation.TimeInterpolator;
 import android.content.Context;
+import android.os.Build;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.MainThread;
 import android.support.annotation.Nullable;
@@ -20,16 +21,52 @@ import java.util.Map;
 public class FloatWindow {
 
     private FloatWindow() {
-
     }
 
-    private static final String mDefaultTag = "default_float_window_tag";
+    public static final String DEFAULT_TAG = "default_float_window_tag";
     private static Map<String, IFloatWindow> mFloatWindowMap;
-    public static Map<String, B> mMap = new HashMap<String, B>();
+    public static Map<String, Builder> mMap = new HashMap<String, Builder>();
 
 
     public static IFloatWindow get() {
-        return get(mDefaultTag);
+        return get(DEFAULT_TAG);
+    }
+
+    public static void prepare(Context context) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
+            Util.req(context);
+        } else if (Miui.rom() || DeviceType.isOppo()) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                Util.req(context);
+            } else {
+                Miui.req(context, new PermissionListener() {
+                    @Override
+                    public void onSuccess() {
+                    }
+
+                    @Override
+                    public void onFail() {
+                    }
+                });
+            }
+        }
+    }
+
+
+    public static boolean isViewVisible(String tag) {
+        IFloatWindow f = get(tag);
+        if (f == null) {
+            return false;
+        }
+        if (f.isViewVisible()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public static boolean isViewVisible() {
+        return isViewVisible(DEFAULT_TAG);
     }
 
     public static IFloatWindow get(String tag) {
@@ -39,15 +76,15 @@ public class FloatWindow {
         return mFloatWindowMap == null ? null : mFloatWindowMap.get(tag);
     }
 
-    private static B mBuilder = null;
+    private static Builder mBuilder = null;
 
     @MainThread
-    public static B with(Context applicationContext) {
-        return mBuilder = new B(applicationContext);
+    public static Builder with(Context applicationContext) {
+        return mBuilder = new Builder(applicationContext);
     }
 
     public static void destroy() {
-        destroy(mDefaultTag);
+        destroy(DEFAULT_TAG);
     }
 
     public static void destroy(String tag) {
@@ -56,9 +93,10 @@ public class FloatWindow {
         }
         mFloatWindowMap.get(tag).dismiss();
         mFloatWindowMap.remove(tag);
+        mMap.remove(tag);
     }
 
-    public static class B {
+    public static class Builder {
         Context mApplicationContext;
         View mView;
         private int mLayoutId;
@@ -72,62 +110,62 @@ public class FloatWindow {
         int mMoveType = MoveType.slide;
         long mDuration = 300;
         TimeInterpolator mInterpolator;
-        private String mTag = mDefaultTag;
+        private String mTag = DEFAULT_TAG;
         boolean mDesktopShow;
 
 
-        private B() {
+        private Builder() {
         }
 
-        B(Context applicationContext) {
+        Builder(Context applicationContext) {
             mApplicationContext = applicationContext;
         }
 
-        public B setView(View view) {
+        public Builder setView(View view) {
             mView = view;
             if (!TextUtils.isEmpty(mTag)) {
                 if (mMap.containsKey(mTag)) {
-                    B temp = mMap.get(mTag);
+                    Builder temp = mMap.get(mTag);
                     temp.mView = view;
                 }
             }
             return this;
         }
 
-        public B setView(@LayoutRes int layoutId) {
+        public Builder setView(@LayoutRes int layoutId) {
             mLayoutId = layoutId;
             if (!TextUtils.isEmpty(mTag)) {
                 if (mMap.containsKey(mTag)) {
-                    B temp = mMap.get(mTag);
+                    Builder temp = mMap.get(mTag);
                     temp.mLayoutId = layoutId;
                 }
             }
             return this;
         }
 
-        public B setWidth(int width) {
+        public Builder setWidth(int width) {
             mWidth = width;
             if (!TextUtils.isEmpty(mTag)) {
                 if (mMap.containsKey(mTag)) {
-                    B temp = mMap.get(mTag);
+                    Builder temp = mMap.get(mTag);
                     temp.mWidth = width;
                 }
             }
             return this;
         }
 
-        public B setHeight(int height) {
+        public Builder setHeight(int height) {
             mHeight = height;
             if (!TextUtils.isEmpty(mTag)) {
                 if (mMap.containsKey(mTag)) {
-                    B temp = mMap.get(mTag);
+                    Builder temp = mMap.get(mTag);
                     temp.mHeight = height;
                 }
             }
             return this;
         }
 
-        public B setWidth(@Screen.screenType int screenType, float ratio) {
+        public Builder setWidth(@Screen.screenType int screenType, float ratio) {
             int width = (int) ((screenType == Screen.width ?
                     Util.getScreenWidth(mApplicationContext) :
                     Util.getScreenHeight(mApplicationContext)) * ratio);
@@ -135,7 +173,7 @@ public class FloatWindow {
 
             if (!TextUtils.isEmpty(mTag)) {
                 if (mMap.containsKey(mTag)) {
-                    B temp = mMap.get(mTag);
+                    Builder temp = mMap.get(mTag);
                     temp.mWidth = width;
                 }
             }
@@ -143,7 +181,7 @@ public class FloatWindow {
         }
 
 
-        public B setHeight(@Screen.screenType int screenType, float ratio) {
+        public Builder setHeight(@Screen.screenType int screenType, float ratio) {
 
             int height = (int) ((screenType == Screen.width ?
                     Util.getScreenWidth(mApplicationContext) :
@@ -152,7 +190,7 @@ public class FloatWindow {
 
             if (!TextUtils.isEmpty(mTag)) {
                 if (mMap.containsKey(mTag)) {
-                    B temp = mMap.get(mTag);
+                    Builder temp = mMap.get(mTag);
                     temp.mHeight = height;
                 }
             }
@@ -160,29 +198,29 @@ public class FloatWindow {
         }
 
 
-        public B setX(int x) {
+        public Builder setX(int x) {
             xOffset = x;
             if (!TextUtils.isEmpty(mTag)) {
                 if (mMap.containsKey(mTag)) {
-                    B temp = mMap.get(mTag);
+                    Builder temp = mMap.get(mTag);
                     temp.xOffset = x;
                 }
             }
             return this;
         }
 
-        public B setY(int y) {
+        public Builder setY(int y) {
             yOffset = y;
             if (!TextUtils.isEmpty(mTag)) {
                 if (mMap.containsKey(mTag)) {
-                    B temp = mMap.get(mTag);
+                    Builder temp = mMap.get(mTag);
                     temp.yOffset = y;
                 }
             }
             return this;
         }
 
-        public B setX(@Screen.screenType int screenType, float ratio) {
+        public Builder setX(@Screen.screenType int screenType, float ratio) {
             int x = (int) ((screenType == Screen.width ?
                     Util.getScreenWidth(mApplicationContext) :
                     Util.getScreenHeight(mApplicationContext)) * ratio);
@@ -190,14 +228,14 @@ public class FloatWindow {
 
             if (!TextUtils.isEmpty(mTag)) {
                 if (mMap.containsKey(mTag)) {
-                    B temp = mMap.get(mTag);
+                    Builder temp = mMap.get(mTag);
                     temp.xOffset = x;
                 }
             }
             return this;
         }
 
-        public B setY(@Screen.screenType int screenType, float ratio) {
+        public Builder setY(@Screen.screenType int screenType, float ratio) {
             int y = (int) ((screenType == Screen.width ?
                     Util.getScreenWidth(mApplicationContext) :
                     Util.getScreenHeight(mApplicationContext)) * ratio);
@@ -206,7 +244,7 @@ public class FloatWindow {
 
             if (!TextUtils.isEmpty(mTag)) {
                 if (mMap.containsKey(mTag)) {
-                    B temp = mMap.get(mTag);
+                    Builder temp = mMap.get(mTag);
                     temp.yOffset = y;
                 }
             }
@@ -220,13 +258,13 @@ public class FloatWindow {
          * @param show       　过滤类型,子类类型也会生效
          * @param activities 　过滤界面
          */
-        public B setFilter(boolean show, Class... activities) {
+        public Builder setFilter(boolean show, Class... activities) {
             mShow = show;
             mActivities = activities;
 
             if (!TextUtils.isEmpty(mTag)) {
                 if (mMap.containsKey(mTag)) {
-                    B temp = mMap.get(mTag);
+                    Builder temp = mMap.get(mTag);
                     temp.mShow = show;
                     temp.mActivities = activities;
                 }
@@ -240,11 +278,11 @@ public class FloatWindow {
          * @param moveType
          * @return
          */
-        public B setMoveType(@MoveType.MOVE_TYPE int moveType) {
+        public Builder setMoveType(@MoveType.MOVE_TYPE int moveType) {
             mMoveType = moveType;
             if (!TextUtils.isEmpty(mTag)) {
                 if (mMap.containsKey(mTag)) {
-                    B temp = mMap.get(mTag);
+                    Builder temp = mMap.get(mTag);
                     temp.mMoveType = moveType;
                 }
             }
@@ -260,12 +298,12 @@ public class FloatWindow {
          * @param interpolator
          * @return
          */
-        public B setMoveStyle(long duration, @Nullable TimeInterpolator interpolator) {
+        public Builder setMoveStyle(long duration, @Nullable TimeInterpolator interpolator) {
             mDuration = duration;
             mInterpolator = interpolator;
             if (!TextUtils.isEmpty(mTag)) {
                 if (mMap.containsKey(mTag)) {
-                    B temp = mMap.get(mTag);
+                    Builder temp = mMap.get(mTag);
                     temp.mDuration = duration;
                     temp.mInterpolator = interpolator;
                 }
@@ -279,7 +317,7 @@ public class FloatWindow {
          * @param tag
          * @return
          */
-        public B setTag(String tag) {
+        public Builder setTag(String tag) {
             mTag = tag;
             if (!mMap.containsKey(mTag)) {
                 mMap.put(mTag, this);
@@ -293,12 +331,12 @@ public class FloatWindow {
          * @param show
          * @return
          */
-        public B setDesktopShow(boolean show) {
+        public Builder setDesktopShow(boolean show) {
             mDesktopShow = show;
 
             if (!TextUtils.isEmpty(mTag)) {
                 if (mMap.containsKey(mTag)) {
-                    B temp = mMap.get(mTag);
+                    Builder temp = mMap.get(mTag);
                     temp.mDesktopShow = show;
                 }
             }

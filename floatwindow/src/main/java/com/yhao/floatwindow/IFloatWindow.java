@@ -7,8 +7,10 @@ import android.view.View;
  * https://github.com/yhaolpz
  */
 public abstract class IFloatWindow {
+    //展示
     public abstract void show();
 
+    //隐藏
     public abstract void hide();
 
     public abstract int getX();
@@ -25,5 +27,8 @@ public abstract class IFloatWindow {
 
     public abstract View getView();
 
-    public abstract void dismiss();
+    public abstract boolean isViewVisible();
+
+    //调整为销毁
+    abstract void dismiss();
 }

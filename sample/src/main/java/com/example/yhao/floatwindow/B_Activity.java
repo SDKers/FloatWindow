@@ -13,7 +13,7 @@ public class B_Activity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_b);
-        setTitle("B");
+        setTitle("Builder");
     }
 
     public void change(View view) {

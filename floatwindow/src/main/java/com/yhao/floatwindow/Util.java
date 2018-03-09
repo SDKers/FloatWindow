@@ -16,7 +16,6 @@ import java.lang.reflect.Method;
  */
 class Util {
 
-
     static View inflate(Context applicationContext, int layoutId) {
         LayoutInflater inflate = (LayoutInflater) applicationContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         return inflate.inflate(layoutId, null);
@@ -44,5 +43,21 @@ class Util {
 
     static boolean isViewVisible(View view) {
         return view.getGlobalVisibleRect(new Rect());
+    }
+
+
+    public static void req(Context context) {
+        if (PermissionUtil.hasPermission(context)) {
+            return;
+        }
+        FloatActivity.request(context, new PermissionListener() {
+            @Override
+            public void onSuccess() {
+            }
+
+            @Override
+            public void onFail() {
+            }
+        });
     }
 }

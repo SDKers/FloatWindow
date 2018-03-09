@@ -4,19 +4,106 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    tools:layout_editor_absoluteY="81dp">
 
 
     <Button
-        android:id="@+id/button4"
+        android:id="@+id/btnOpenActivityB"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="change"
+        android:layout_marginTop="5dp"
+        android:onClick="onClick"
         android:text="打开 B 界面"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/btnReqPermission"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:onClick="onClick"
+        android:text="申请权限且不构建"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnOpenActivityB" />
+
+    <Button
+        android:id="@+id/btnOnlyBuild"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="44dp"
+        android:layout_marginTop="8dp"
+        android:onClick="onClick"
+        android:text="构建不加载"
+        app:layout_constraintStart_toStartOf="@+id/btnOpenActivityB"
+        app:layout_constraintTop_toBottomOf="@+id/btnOpenActivityB" />
+
+    <Button
+        android:id="@+id/btnInitAndShowA"
+        android:layout_width="wrap_content"
+        android:layout_height="45dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="31dp"
+        android:onClick="onClick"
+        android:text="初始化展示1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnReqPermission" />
+
+    <Button
+        android:id="@+id/btnHideA"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="23dp"
+        android:onClick="onClick"
+        android:text="隐藏悬浮窗1"
+        app:layout_constraintBaseline_toBaselineOf="@+id/btnInitAndShowA"
+        app:layout_constraintStart_toEndOf="@+id/btnInitAndShowA" />
+
+    <Button
+        android:id="@+id/btnDissmissA"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="3dp"
+        android:onClick="onClick"
+        android:text="销毁悬浮窗1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/btnHideA" />
+
+    <Button
+        android:id="@+id/btnIsVisable1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="35dp"
+        android:layout_marginTop="43dp"
+        android:onClick="onClick"
+        android:text="判断1是否可见"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnDissmissA" />
+
+    <Button
+        android:id="@+id/btnShow2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="46dp"
+        android:onClick="onClick"
+        android:text="展示2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnInitAndShowA" />
+
+    <Button
+        android:id="@+id/btnDismiss2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="11dp"
+        android:onClick="onClick"
+        android:text="销毁2"
+        app:layout_constraintBaseline_toBaselineOf="@+id/btnIsVisable1"
+        app:layout_constraintEnd_toStartOf="@+id/btnIsVisable1" />
 
 
 </android.support.constraint.ConstraintLayout>
