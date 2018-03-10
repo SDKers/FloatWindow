@@ -8,11 +8,16 @@ import android.provider.Settings;
 import android.view.View;
 import android.view.WindowManager;
 
+import com.yhao.floatwindow.permission.PermissionListener;
+import com.yhao.floatwindow.permission.PermissionUtil;
+import com.yhao.floatwindow.permission.ResumedListener;
+import com.yhao.floatwindow.utils.LogUtil;
+import com.yhao.floatwindow.utils.Rom;
+
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.yhao.floatwindow.Rom.isIntentAvailable;
 
 /**
  * Created by yhao on 2017/12/30.
@@ -123,7 +128,7 @@ class Miui {
         Uri uri = Uri.fromParts("package", packageName, null);
         intent.setData(uri);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        if (isIntentAvailable(intent, context)) {
+        if (Rom.isIntentAvailable(intent, context)) {
             context.startActivity(intent);
         } else {
             LogUtil.e("intent is not available!");
@@ -136,7 +141,7 @@ class Miui {
                 "com.miui.permcenter.permissions.AppPermissionsEditorActivity");
         intent.putExtra("extra_pkgname", context.getPackageName());
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        if (isIntentAvailable(intent, context)) {
+        if (Rom.isIntentAvailable(intent, context)) {
             context.startActivity(intent);
         } else {
             LogUtil.e("intent is not available!");
@@ -148,14 +153,14 @@ class Miui {
         intent.setClassName("com.miui.securitycenter", "com.miui.permcenter.permissions.PermissionsEditorActivity");
         intent.putExtra("extra_pkgname", context.getPackageName());
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        if (isIntentAvailable(intent, context)) {
+        if (Rom.isIntentAvailable(intent, context)) {
             context.startActivity(intent);
         } else {
             intent = new Intent("miui.intent.action.APP_PERM_EDITOR");
             intent.setPackage("com.miui.securitycenter");
             intent.putExtra("extra_pkgname", context.getPackageName());
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            if (isIntentAvailable(intent, context)) {
+            if (Rom.isIntentAvailable(intent, context)) {
                 context.startActivity(intent);
             } else {
                 LogUtil.e("intent is not available!");

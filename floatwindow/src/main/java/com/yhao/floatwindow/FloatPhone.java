@@ -6,6 +6,11 @@ import android.os.Build;
 import android.view.View;
 import android.view.WindowManager;
 
+import com.yhao.floatwindow.permission.FloatActivity;
+import com.yhao.floatwindow.permission.PermissionListener;
+import com.yhao.floatwindow.utils.DeviceType;
+import com.yhao.floatwindow.utils.LogUtil;
+
 /**
  * Created by yhao on 17-11-14.
  * https://github.com/yhaolpz

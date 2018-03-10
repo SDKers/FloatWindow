@@ -11,6 +11,9 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 
+import com.yhao.floatwindow.utils.LogUtil;
+import com.yhao.floatwindow.utils.Util;
+
 /**
  * Created by yhao on 2017/12/22.
  * https://github.com/yhaolpz

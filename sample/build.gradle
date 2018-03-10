@@ -11,6 +11,7 @@ android {
         versionCode 1
         versionName "1.0"
     }
+    //目标去除编译警告
     aaptOptions {
         cruncherEnabled = false
         useNewCruncher = false
@@ -18,6 +19,12 @@ android {
     lintOptions {
         checkReleaseBuilds false
         abortOnError false
+
+//        abortOnError true
+        warningsAsErrors false
+        disable "UnusedResources"
+        textOutput "stdout"
+        textReport true
     }
     buildTypes {
         release {
@@ -26,7 +33,12 @@ android {
         }
     }
 }
-
+// 忽略文档编译错误. 设置编码
+tasks.withType(Javadoc) {
+    options.addStringOption('Xdoclint:none', '-quiet')
+    options.addStringOption('encoding', 'UTF-8')
+    options.addStringOption('charSet', 'UTF-8')
+}
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile project(':floatwindow')

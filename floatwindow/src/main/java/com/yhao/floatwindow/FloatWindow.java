@@ -11,6 +11,12 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.yhao.floatwindow.permission.PermissionListener;
+import com.yhao.floatwindow.permission.PermissionUtil;
+import com.yhao.floatwindow.utils.DeviceType;
+import com.yhao.floatwindow.utils.LogUtil;
+import com.yhao.floatwindow.utils.Util;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -34,10 +40,10 @@ public class FloatWindow {
 
     public static void prepare(Context context) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
-            Util.req(context);
+            PermissionUtil.req(context);
         } else if (Miui.rom() || DeviceType.isOppo()) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                Util.req(context);
+                PermissionUtil.req(context);
             } else {
                 Miui.req(context, new PermissionListener() {
                     @Override

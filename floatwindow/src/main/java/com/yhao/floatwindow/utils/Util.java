@@ -1,29 +1,26 @@
-package com.yhao.floatwindow;
+package com.yhao.floatwindow.utils;
 
 import android.content.Context;
-import android.graphics.PixelFormat;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 
-import java.lang.reflect.Method;
-
 /**
  * Created by yhao on 2017/12/22.
  * https://github.com/yhaolpz
  */
-class Util {
+public class Util {
 
-    static View inflate(Context applicationContext, int layoutId) {
+    public static View inflate(Context applicationContext, int layoutId) {
         LayoutInflater inflate = (LayoutInflater) applicationContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         return inflate.inflate(layoutId, null);
     }
 
     private static Point sPoint;
 
-    static int getScreenWidth(Context context) {
+    public static int getScreenWidth(Context context) {
         if (sPoint == null) {
             sPoint = new Point();
             WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
@@ -32,7 +29,7 @@ class Util {
         return sPoint.x;
     }
 
-    static int getScreenHeight(Context context) {
+    public static int getScreenHeight(Context context) {
         if (sPoint == null) {
             sPoint = new Point();
             WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
@@ -41,23 +38,9 @@ class Util {
         return sPoint.y;
     }
 
-    static boolean isViewVisible(View view) {
+    public static boolean isViewVisible(View view) {
         return view.getGlobalVisibleRect(new Rect());
     }
 
 
-    public static void req(Context context) {
-        if (PermissionUtil.hasPermission(context)) {
-            return;
-        }
-        FloatActivity.request(context, new PermissionListener() {
-            @Override
-            public void onSuccess() {
-            }
-
-            @Override
-            public void onFail() {
-            }
-        });
-    }
 }

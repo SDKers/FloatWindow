@@ -10,10 +10,10 @@ import android.widget.ImageView;
 import com.example.yhao.fixedfloatwindow.R;
 import com.yhao.floatwindow.FloatWindow;
 import com.yhao.floatwindow.IFloatWindow;
-import com.yhao.floatwindow.LogUtil;
+import com.yhao.floatwindow.utils.LogUtil;
 import com.yhao.floatwindow.MoveType;
 import com.yhao.floatwindow.Screen;
-import com.yhao.floatwindow.T;
+import com.yhao.floatwindow.utils.T;
 
 public class A_Activity extends AppCompatActivity {
 

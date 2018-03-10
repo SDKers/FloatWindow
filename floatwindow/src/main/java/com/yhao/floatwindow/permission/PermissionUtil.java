@@ -1,4 +1,4 @@
-package com.yhao.floatwindow;
+package com.yhao.floatwindow.permission;
 
 import android.app.AppOpsManager;
 import android.content.Context;
@@ -10,15 +10,31 @@ import android.support.annotation.RequiresApi;
 import android.view.View;
 import android.view.WindowManager;
 
+import com.yhao.floatwindow.utils.LogUtil;
+
 import java.lang.reflect.Method;
 
 /**
  * Created by yhao on 2017/12/29.
  * https://github.com/yhaolpz
  */
-class PermissionUtil {
+public class PermissionUtil {
+    public static void req(Context context) {
+        if (hasPermission(context)) {
+            return;
+        }
+        FloatActivity.request(context, new PermissionListener() {
+            @Override
+            public void onSuccess() {
+            }
 
-    static boolean hasPermission(Context context) {
+            @Override
+            public void onFail() {
+            }
+        });
+    }
+
+    public static boolean hasPermission(Context context) {
         if (Build.VERSION.SDK_INT >= 23) {
             return Settings.canDrawOverlays(context);
         } else {

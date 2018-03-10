@@ -1,4 +1,4 @@
-package com.yhao.floatwindow;
+package com.yhao.floatwindow.utils;
 
 import android.os.Build;
 import android.text.TextUtils;

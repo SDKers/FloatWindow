@@ -9,6 +9,8 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 
+import com.yhao.floatwindow.permission.ResumedListener;
+
 /**
  * Created by yhao on 17-12-1.
  * 用于控制悬浮窗显示周期

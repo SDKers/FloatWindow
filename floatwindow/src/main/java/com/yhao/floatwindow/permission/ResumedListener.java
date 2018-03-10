@@ -1,9 +1,9 @@
-package com.yhao.floatwindow;
+package com.yhao.floatwindow.permission;
 
 /**
  * Created by yhao on 2017/12/30.
  * https://github.com/yhaolpz
  */
-interface ResumedListener {
+public interface ResumedListener {
     void onResumed();
 }
