@@ -42,6 +42,5 @@ tasks.withType(Javadoc) {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile project(':floatwindow')
-    compile 'com.android.support:appcompat-v7:26.+'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
 }
