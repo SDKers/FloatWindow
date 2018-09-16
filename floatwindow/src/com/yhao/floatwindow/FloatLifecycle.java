@@ -1,5 +1,8 @@
 package com.yhao.floatwindow;
 
+import com.yhao.floatwindow.interfaces.LifecycleListener;
+import com.yhao.floatwindow.interfaces.ResumedListener;
+
 import android.app.Activity;
 import android.app.Application;
 import android.content.BroadcastReceiver;
@@ -8,8 +11,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
-
-import com.yhao.floatwindow.permission.ResumedListener;
 
 /**
  * Created by yhao on 17-12-1. 用于控制悬浮窗显示周期 使用了三种方法针对返回桌面时隐藏悬浮按钮 1.startCount计数，针对back到桌面可以及时隐藏 2.监听home键，从而及时隐藏

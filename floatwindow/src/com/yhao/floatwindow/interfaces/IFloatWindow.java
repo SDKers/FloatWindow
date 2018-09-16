@@ -1,5 +1,6 @@
-package com.yhao.floatwindow;
+package com.yhao.floatwindow.interfaces;
 
+import com.yhao.floatwindow.intdef.Screen;
 import android.view.View;
 
 /**
@@ -11,7 +12,7 @@ public abstract class IFloatWindow {
 
     // 隐藏
     public abstract void hide();
-    
+
     public abstract boolean isShowing();
 
     public abstract int getX();
@@ -31,5 +32,5 @@ public abstract class IFloatWindow {
     public abstract boolean isViewVisible();
 
     // 调整为销毁
-    abstract void dismiss();
+    public abstract void dismiss();
 }

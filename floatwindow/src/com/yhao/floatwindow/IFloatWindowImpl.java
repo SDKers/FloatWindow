@@ -1,5 +1,13 @@
 package com.yhao.floatwindow;
 
+import com.yhao.floatwindow.intdef.MoveType;
+import com.yhao.floatwindow.intdef.Screen;
+import com.yhao.floatwindow.interfaces.FloatView;
+import com.yhao.floatwindow.interfaces.IFloatWindow;
+import com.yhao.floatwindow.interfaces.LifecycleListener;
+import com.yhao.floatwindow.utils.LogUtil;
+import com.yhao.floatwindow.utils.Util;
+
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
@@ -12,9 +20,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.animation.DecelerateInterpolator;
-
-import com.yhao.floatwindow.utils.LogUtil;
-import com.yhao.floatwindow.utils.Util;
 
 /**
  * Created by yhao on 2017/12/22. https://github.com/yhaolpz
@@ -98,8 +103,6 @@ public class IFloatWindowImpl extends IFloatWindow {
         }
     }
 
-   
-
     @Override
     public void hide() {
         if (once || !isShow) {
@@ -114,7 +117,7 @@ public class IFloatWindowImpl extends IFloatWindow {
     }
 
     @Override
-    void dismiss() {
+    public void dismiss() {
         isShow = false;
         if (mBuilder.mViewStateListener != null) {
             mBuilder.mViewStateListener.onDismiss();

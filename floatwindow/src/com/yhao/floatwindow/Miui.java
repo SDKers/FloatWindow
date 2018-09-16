@@ -4,9 +4,9 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.yhao.floatwindow.interfaces.ResumedListener;
 import com.yhao.floatwindow.permission.PermissionListener;
 import com.yhao.floatwindow.permission.PermissionUtil;
-import com.yhao.floatwindow.permission.ResumedListener;
 import com.yhao.floatwindow.utils.LogUtil;
 import com.yhao.floatwindow.utils.Rom;
 

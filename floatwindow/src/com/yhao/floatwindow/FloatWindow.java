@@ -3,6 +3,10 @@ package com.yhao.floatwindow;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.yhao.floatwindow.intdef.MoveType;
+import com.yhao.floatwindow.intdef.Screen;
+import com.yhao.floatwindow.interfaces.IFloatWindow;
+import com.yhao.floatwindow.interfaces.ViewStateListener;
 import com.yhao.floatwindow.permission.PermissionListener;
 import com.yhao.floatwindow.permission.PermissionUtil;
 import com.yhao.floatwindow.utils.DeviceType;

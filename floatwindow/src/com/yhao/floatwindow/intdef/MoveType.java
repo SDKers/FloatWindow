@@ -1,4 +1,4 @@
-package com.yhao.floatwindow;
+package com.yhao.floatwindow.intdef;
 
 import android.support.annotation.IntDef;
 
@@ -9,7 +9,7 @@ import java.lang.annotation.RetentionPolicy;
  * Created by yhao on 2017/12/22. https://github.com/yhaolpz
  */
 public class MoveType {
-    static final int fixed = 0;
+    public static final int fixed = 0;
     // 不可拖动
     public static final int inactive = 1;
     // 可拖动
@@ -21,5 +21,5 @@ public class MoveType {
 
     @IntDef({fixed, inactive, active, slide, back})
     @Retention(RetentionPolicy.SOURCE)
-    @interface MOVE_TYPE {}
+    public @interface MOVE_TYPE {}
 }

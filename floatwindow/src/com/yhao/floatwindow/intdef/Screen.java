@@ -1,4 +1,4 @@
-package com.yhao.floatwindow;
+package com.yhao.floatwindow.intdef;
 
 import android.support.annotation.IntDef;
 
@@ -14,5 +14,5 @@ public class Screen {
 
     @IntDef({width, height})
     @Retention(RetentionPolicy.SOURCE)
-    @interface screenType {}
+    public @interface screenType {}
 }

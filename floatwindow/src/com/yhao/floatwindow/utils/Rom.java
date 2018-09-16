@@ -9,16 +9,14 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 /**
- * Created by yhao on 2017/12/30.
- * https://github.com/yhaolpz
+ * Created by yhao on 2017/12/30. https://github.com/yhaolpz
  */
 public class Rom {
 
-    public  static boolean isIntentAvailable(Intent intent, Context context) {
-        return intent != null && context.getPackageManager().queryIntentActivities(
-                intent, PackageManager.MATCH_DEFAULT_ONLY).size() > 0;
+    public static boolean isIntentAvailable(Intent intent, Context context) {
+        return intent != null
+            && context.getPackageManager().queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY).size() > 0;
     }
-
 
     public static String getProp(String name) {
         BufferedReader input = null;

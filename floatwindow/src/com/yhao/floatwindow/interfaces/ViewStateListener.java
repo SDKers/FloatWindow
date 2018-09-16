@@ -1,4 +1,4 @@
-package com.yhao.floatwindow;
+package com.yhao.floatwindow.interfaces;
 
 /**
  * Created by yhao on 2018/5/5 https://github.com/yhaolpz

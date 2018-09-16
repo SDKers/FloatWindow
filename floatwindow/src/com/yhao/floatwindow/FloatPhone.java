@@ -1,15 +1,16 @@
 package com.yhao.floatwindow;
 
+import com.yhao.floatwindow.interfaces.FloatView;
+import com.yhao.floatwindow.permission.FloatActivity;
+import com.yhao.floatwindow.permission.PermissionListener;
+import com.yhao.floatwindow.utils.DeviceType;
+import com.yhao.floatwindow.utils.LogUtil;
+
 import android.content.Context;
 import android.graphics.PixelFormat;
 import android.os.Build;
 import android.view.View;
 import android.view.WindowManager;
-
-import com.yhao.floatwindow.permission.FloatActivity;
-import com.yhao.floatwindow.permission.PermissionListener;
-import com.yhao.floatwindow.utils.DeviceType;
-import com.yhao.floatwindow.utils.LogUtil;
 
 /**
  * Created by yhao on 17-11-14. https://github.com/yhaolpz
@@ -137,7 +138,7 @@ class FloatPhone extends FloatView {
     }
 
     @Override
-    void updateX(int x) {
+    public void updateX(int x) {
         if (isRemove) {
             return;
         }
@@ -147,7 +148,7 @@ class FloatPhone extends FloatView {
     }
 
     @Override
-    void updateY(int y) {
+    public void updateY(int y) {
         if (isRemove) {
             return;
         }
@@ -156,12 +157,12 @@ class FloatPhone extends FloatView {
     }
 
     @Override
-    int getX() {
+    public int getX() {
         return mX;
     }
 
     @Override
-    int getY() {
+    public int getY() {
         return mY;
     }
 
