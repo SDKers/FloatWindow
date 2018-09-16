@@ -10,6 +10,7 @@ import android.annotation.SuppressLint;
 import android.os.Build;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewConfiguration;
 import android.view.animation.DecelerateInterpolator;
 
 import com.yhao.floatwindow.utils.LogUtil;
@@ -27,6 +28,12 @@ public class IFloatWindowImpl extends IFloatWindow {
     private boolean once = true;
     private ValueAnimator mAnimator;
     private TimeInterpolator mDecelerateInterpolator;
+    private float downX;
+    private float downY;
+    private float upX;
+    private float upY;
+    private boolean mClick = false;
+    private int mSlop;
 
     @SuppressWarnings("unused")
     private IFloatWindowImpl() {}
@@ -77,8 +84,9 @@ public class IFloatWindowImpl extends IFloatWindow {
             once = false;
             isShow = true;
         } else {
-            if (isShow)
+            if (isShow) {
                 return;
+            }
             getView().setVisibility(View.VISIBLE);
             isShow = true;
         }
@@ -86,8 +94,9 @@ public class IFloatWindowImpl extends IFloatWindow {
 
     @Override
     public void hide() {
-        if (once || !isShow)
+        if (once || !isShow) {
             return;
+        }
         getView().setVisibility(View.INVISIBLE);
         isShow = false;
     }
@@ -145,6 +154,7 @@ public class IFloatWindowImpl extends IFloatWindow {
 
     @Override
     public View getView() {
+        mSlop = ViewConfiguration.get(mBuilder.mApplicationContext).getScaledTouchSlop();
         return mBuilder.mView;
     }
 
@@ -174,6 +184,8 @@ public class IFloatWindowImpl extends IFloatWindow {
 
                         switch (event.getAction()) {
                             case MotionEvent.ACTION_DOWN:
+                                downX = event.getRawX();
+                                downY = event.getRawY();
                                 lastX = event.getRawX();
                                 lastY = event.getRawY();
                                 cancelAnimator();
@@ -188,6 +200,9 @@ public class IFloatWindowImpl extends IFloatWindow {
                                 lastY = event.getRawY();
                                 break;
                             case MotionEvent.ACTION_UP:
+                                upX = event.getRawX();
+                                upY = event.getRawY();
+                                mClick = (Math.abs(upX - downX) > mSlop) || (Math.abs(upY - downY) > mSlop);
                                 switch (mBuilder.mMoveType) {
                                     case MoveType.slide:
                                         int startX = mFloatView.getX();
@@ -220,11 +235,13 @@ public class IFloatWindowImpl extends IFloatWindow {
                                         });
                                         startAnimator();
                                         break;
+                                    default:
+                                        break;
                                 }
                                 break;
 
                         }
-                        return false;
+                        return mClick;
                     }
                 });
         }
