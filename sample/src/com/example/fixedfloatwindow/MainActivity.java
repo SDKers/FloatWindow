@@ -3,9 +3,9 @@ package com.example.fixedfloatwindow;
 import java.lang.reflect.Method;
 
 import com.yhao.floatwindow.FloatWindow;
-import com.yhao.floatwindow.IFloatWindow;
-import com.yhao.floatwindow.MoveType;
-import com.yhao.floatwindow.Screen;
+import com.yhao.floatwindow.intdef.MoveType;
+import com.yhao.floatwindow.intdef.Screen;
+import com.yhao.floatwindow.interfaces.IFloatWindow;
 import com.yhao.floatwindow.utils.LogUtil;
 import com.yhao.floatwindow.utils.T;
 
