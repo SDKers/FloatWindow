@@ -1,8 +1,4 @@
-# FloatWindow 安卓任意界面悬浮窗
-[![](https://jitpack.io/v/yhaolpz/FloatWindow.svg)](https://jitpack.io/#yhaolpz/FloatWindow)
-
-
-![悬浮按钮图](https://raw.githubusercontent.com/yhaolpz/FixedFloatWindow/master/slide.gif)
+# FloatWindowUpdate
 
 特性：
 ===
@@ -25,42 +21,22 @@
 集成：
 ===
 
-第 1 步、在工程的 build.gradle 中添加：
-
-```
-	allprojects {
-		repositories {
-			...
-			maven { url 'https://jitpack.io' }
-		}
-	}
-```
-第 2 步、在应用的  build.gradle 中添加：
-
-```
-	dependencies {
-	        compile 'com.github.yhaolpz:FloatWindow:1.0.8'
-	}
-```
-
-使用：
-===
 
 **0.声明权限**
 
-```java
 
-     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
-
+``` xml
+<uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 ```
+
 
 **1.创建悬浮控件**
 
 ```java
-        FloatWindow
-              .with(getApplicationContext())
-              .setView(view)
-              .build();
+FloatWindow
+      .with(getApplicationContext())
+      .setView(view)
+      .build();
 
 ```
 
@@ -69,15 +45,14 @@ setView 方法可设置 View 子类或 xml 布局。
 **2.设置宽高及显示位置**
 
 ```java
-        FloatWindow
-              .with(getApplicationContext())
-              .setView(view)
-              .setWidth(100)                   //100px
-              .setHeight(Screen.width,0.2f)    //屏幕宽度的 20%
-              .setX(100)                       //100px
-              .setY(Screen.height,0.3f)        //屏幕高度的 30%
-              .build();
-
+FloatWindow
+      .with(getApplicationContext())
+      .setView(view)
+      .setWidth(100)                   //100px
+      .setHeight(Screen.width,0.2f)    //屏幕宽度的 20%
+      .setX(100)                       //100px
+      .setY(Screen.height,0.3f)        //屏幕高度的 30%
+      .build();
 ```
 
 可设置具体数值或屏幕宽/高百分比，默认宽高为 wrap_content；默认位置为屏幕左上角，x、y 为偏移量。
@@ -86,17 +61,17 @@ setView 方法可设置 View 子类或 xml 布局。
 **3.指定界面显示**
 
 ```java
-        FloatWindow
-              .with(getApplicationContext())
-              .setView(view)
-              .setFilter(true, A_Activity.class, C_Activity.class)
-              .build();
+FloatWindow
+      .with(getApplicationContext())
+      .setView(view)
+      .setFilter(true, A_Activity.class, C_Activity.class)
+      .build();
 
 ```
 此方法表示 A_Activity、C_Activity 显示悬浮窗，其他界面隐藏。
 
 ```java
-              .setFilter(false, B_Activity.class)
+    .setFilter(false, B_Activity.class)
 ```
 此方法表示 B_Activity 隐藏悬浮窗，其他界面显示。
 
@@ -198,99 +173,4 @@ MoveType.inactive    : 不可拖动
 ```
 
 创建第一个悬浮窗不需加 tag，之后再创建就需指定唯一 tag ，以此区分，方便进行后续操作。
-
-
-举个栗子：
-===
-
-![悬浮按钮图](https://raw.githubusercontent.com/yhaolpz/FixedFloatWindow/master/back.gif)
-
-此效果实现全部代码为下：
-
-```java
-
-        FloatWindow
-                .with(getApplicationContext())
-                .setView(imageView)
-                .setWidth(Screen.width,0.2f)
-                .setHeight(Screen.width,0.2f)
-                .setX(Screen.width,0.7f)
-                .setY(Screen.height,0.2f)
-                .setMoveType(MoveType.back)
-                .setMoveStyle(300,null)
-                .setFilter(true,A_Activity.class,C_Activity.class)
-                .build();
-
-```
-
-在 [sample](https://github.com/yhaolpz/FloatWindow/blob/master/sample/src/main/java/com/example/yhao/floatwindow/BaseApplication.java) 中也有示例代码。
-
-最后：
---
-![悬浮按钮图](https://raw.githubusercontent.com/yhaolpz/FixedFloatWindow/master/pay.jpg)
-
-本人已尽量去兼容更多机型，但经济有限，如果你想帮助此库，提 Issues 标出当前版本不适配的机型即可，感谢~
-
-
-**更新日志**
---
-
-**v1.0.8**
-
- 适配 4.4~8.0 及各大国产机型
-
- 支持桌面显示
-
-
-**v1.0.7**
-
- 适配 Android 8.0
-
-
-**v1.0.6**
-
- 支持悬浮窗拖动及相关动效
-
- 位置及宽高可设置百分比值
-
- 更改相关类名及使用方法
-
-
-**v1.0.5**
-
- 修复未调用show显示悬浮窗bug
-
-
-**v1.0.4**
-
- 返回桌面将会自动隐藏控件，无需再监听应用退到后台等操作
-
- 新增 Activity 过滤器，可自由指定哪些界面显示，哪些界面不显示
-
- FixedFloatWindow 类改为 FFWindow
-
-
-
-**v1.0.3**
-
- 修复已知 bug
-
- 新增 dismiss 方法
-
- 新增其他方案，如:所有版本都申请权限
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
