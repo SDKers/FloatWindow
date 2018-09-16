@@ -42,12 +42,12 @@ public class IFloatWindowImpl extends IFloatWindow {
         mBuilder = builder;
         if (mBuilder.mMoveType == MoveType.fixed) {
             if (Build.VERSION.SDK_INT >= 25) {
-                mFloatView = new FloatPhone(builder.mApplicationContext);
+                mFloatView = new FloatPhone(builder.mApplicationContext, mBuilder.mPermissionListener);
             } else {
                 mFloatView = new FloatToast(builder.mApplicationContext);
             }
         } else {
-            mFloatView = new FloatPhone(builder.mApplicationContext);
+            mFloatView = new FloatPhone(builder.mApplicationContext, mBuilder.mPermissionListener);
             initTouchEvent();
         }
         mFloatView.setSize(mBuilder.mWidth, mBuilder.mHeight);
@@ -72,6 +72,9 @@ public class IFloatWindowImpl extends IFloatWindow {
                 if (!mBuilder.mDesktopShow) {
                     hide();
                 }
+                if (mBuilder.mViewStateListener != null) {
+                    mBuilder.mViewStateListener.onBackToDesktop();
+                }
             }
         });
     }
@@ -89,8 +92,13 @@ public class IFloatWindowImpl extends IFloatWindow {
             }
             getView().setVisibility(View.VISIBLE);
             isShow = true;
+            if (mBuilder.mViewStateListener != null) {
+                mBuilder.mViewStateListener.onShow();
+            }
         }
     }
+
+   
 
     @Override
     public void hide() {
@@ -99,16 +107,24 @@ public class IFloatWindowImpl extends IFloatWindow {
         }
         getView().setVisibility(View.INVISIBLE);
         isShow = false;
+
+        if (mBuilder.mViewStateListener != null) {
+            mBuilder.mViewStateListener.onHide();
+        }
     }
 
     @Override
     void dismiss() {
         isShow = false;
+        if (mBuilder.mViewStateListener != null) {
+            mBuilder.mViewStateListener.onDismiss();
+        }
         once = true;
         if (mFloatView != null) {
             mFloatView.dismiss();
         }
         mBuilder = null;
+
     }
 
     @Override
@@ -196,6 +212,9 @@ public class IFloatWindowImpl extends IFloatWindow {
                                 newX = (int)(mFloatView.getX() + changeX);
                                 newY = (int)(mFloatView.getY() + changeY);
                                 mFloatView.updateXY(newX, newY);
+                                if (mBuilder.mViewStateListener != null) {
+                                    mBuilder.mViewStateListener.onPositionUpdate(newX, newY);
+                                }
                                 lastX = event.getRawX();
                                 lastY = event.getRawY();
                                 break;
@@ -208,13 +227,18 @@ public class IFloatWindowImpl extends IFloatWindow {
                                         int startX = mFloatView.getX();
                                         int endX = (startX * 2 + v.getWidth() > Util
                                             .getScreenWidth(mBuilder.mApplicationContext))
-                                                ? Util.getScreenWidth(mBuilder.mApplicationContext) - v.getWidth() : 0;
+                                                ? Util.getScreenWidth(mBuilder.mApplicationContext) - v.getWidth()
+                                                    - mBuilder.mSlideRightMargin
+                                                : mBuilder.mSlideLeftMargin;
                                         mAnimator = ObjectAnimator.ofInt(startX, endX);
                                         mAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                                             @Override
                                             public void onAnimationUpdate(ValueAnimator animation) {
                                                 int x = (Integer)animation.getAnimatedValue();
                                                 mFloatView.updateX(x);
+                                                if (mBuilder.mViewStateListener != null) {
+                                                    mBuilder.mViewStateListener.onPositionUpdate(x, (int)upY);
+                                                }
                                             }
                                         });
                                         startAnimator();
@@ -231,6 +255,9 @@ public class IFloatWindowImpl extends IFloatWindow {
                                                 int x = (Integer)animation.getAnimatedValue("x");
                                                 int y = (Integer)animation.getAnimatedValue("y");
                                                 mFloatView.updateXY(x, y);
+                                                if (mBuilder.mViewStateListener != null) {
+                                                    mBuilder.mViewStateListener.onPositionUpdate(x, y);
+                                                }
                                             }
                                         });
                                         startAnimator();
@@ -261,15 +288,26 @@ public class IFloatWindowImpl extends IFloatWindow {
                 mAnimator.removeAllUpdateListeners();
                 mAnimator.removeAllListeners();
                 mAnimator = null;
+                if (mBuilder.mViewStateListener != null) {
+                    mBuilder.mViewStateListener.onMoveAnimEnd();
+                }
             }
         });
         mAnimator.setDuration(mBuilder.mDuration).start();
+        if (mBuilder.mViewStateListener != null) {
+            mBuilder.mViewStateListener.onMoveAnimStart();
+        }
     }
 
     private void cancelAnimator() {
         if (mAnimator != null && mAnimator.isRunning()) {
             mAnimator.cancel();
         }
+    }
+
+    @Override
+    public boolean isShowing() {
+        return isShow;
     }
 
 }

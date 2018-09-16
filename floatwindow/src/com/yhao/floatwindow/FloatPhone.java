@@ -23,14 +23,18 @@ class FloatPhone extends FloatView {
     private View mView;
     private int mX, mY;
     private boolean isRemove = false;
+    private PermissionListener mPermissionListener;
 
-    FloatPhone(Context applicationContext) {
+    FloatPhone(Context applicationContext, PermissionListener permissionListener) {
         mContext = applicationContext;
+        mPermissionListener = permissionListener;
         mWindowManager = (WindowManager)applicationContext.getSystemService(Context.WINDOW_SERVICE);
         mLayoutParams = new WindowManager.LayoutParams();
         mLayoutParams.format = PixelFormat.RGBA_8888;
-        mLayoutParams.flags =
-            WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
+        // mLayoutParams.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL |
+        // WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
+        mLayoutParams.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
+            | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS;
         mLayoutParams.windowAnimations = 0;
     }
 
@@ -66,10 +70,17 @@ class FloatPhone extends FloatView {
                     @Override
                     public void onSuccess() {
                         mWindowManager.addView(mView, mLayoutParams);
+                        if (mPermissionListener != null) {
+                            mPermissionListener.onSuccess();
+                        }
                     }
 
                     @Override
-                    public void onFail() {}
+                    public void onFail() {
+                        if (mPermissionListener != null) {
+                            mPermissionListener.onFail();
+                        }
+                    }
                 });
             }
         } else {
@@ -95,10 +106,17 @@ class FloatPhone extends FloatView {
             @Override
             public void onSuccess() {
                 mWindowManager.addView(mView, mLayoutParams);
+                if (mPermissionListener != null) {
+                    mPermissionListener.onSuccess();
+                }
             }
 
             @Override
-            public void onFail() {}
+            public void onFail() {
+                if (mPermissionListener != null) {
+                    mPermissionListener.onFail();
+                }
+            }
         });
     }
 

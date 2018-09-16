@@ -109,10 +109,14 @@ public class FloatWindow {
         boolean mShow = true;
         Class<?>[] mActivities;
         int mMoveType = MoveType.slide;
+        int mSlideLeftMargin;
+        int mSlideRightMargin;
         long mDuration = 300;
         TimeInterpolator mInterpolator;
         private String mTag = DEFAULT_TAG;
         boolean mDesktopShow;
+        PermissionListener mPermissionListener;
+        ViewStateListener mViewStateListener;
 
         @SuppressWarnings("unused")
         private Builder() {}
@@ -282,6 +286,20 @@ public class FloatWindow {
         }
 
         /**
+         * 设置带边距的贴边动画，只有 moveType 为 MoveType.slide，设置边距才有意义，这个方法不标准，后面调整
+         *
+         * @param moveType 贴边动画 MoveType.slide
+         * @param slideLeftMargin 贴边动画左边距，默认为 0
+         * @param slideRightMargin 贴边动画右边距，默认为 0
+         */
+        public Builder setMoveType(@MoveType.MOVE_TYPE int moveType, int slideLeftMargin, int slideRightMargin) {
+            mMoveType = moveType;
+            mSlideLeftMargin = slideLeftMargin;
+            mSlideRightMargin = slideRightMargin;
+            return this;
+        }
+
+        /**
          * 自定义动画效果，只在 MoveType.slide 或 MoveType.back 模式下设置此项才有意义。 默认减速插值器，默认动画时长为 300ms。 setMoveStyle(500, new
          * AccelerateInterpolator()) 为贴边动画时长为500ms，加速插值器
          *
@@ -331,6 +349,16 @@ public class FloatWindow {
                     temp.mDesktopShow = show;
                 }
             }
+            return this;
+        }
+
+        public Builder setPermissionListener(PermissionListener listener) {
+            mPermissionListener = listener;
+            return this;
+        }
+
+        public Builder setViewStateListener(ViewStateListener listener) {
+            mViewStateListener = listener;
             return this;
         }
 
