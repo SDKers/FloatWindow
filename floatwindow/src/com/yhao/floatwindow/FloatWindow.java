@@ -33,6 +33,7 @@ public class FloatWindow {
         return mFloatWindowMap == null ? null : mFloatWindowMap.get(tag);
     }
 
+    @SuppressWarnings("unused")
     private static Builder mBuilder = null;
 
     public static Builder with(Context applicationContext) {
@@ -61,7 +62,7 @@ public class FloatWindow {
         int xOffset;
         int yOffset;
         boolean mShow = true;
-        Class[] mActivities;
+        Class<?>[] mActivities;
         int mMoveType = MoveType.slide;
         int mSlideLeftMargin;
         int mSlideRightMargin;
@@ -72,9 +73,8 @@ public class FloatWindow {
         PermissionListener mPermissionListener;
         ViewStateListener mViewStateListener;
 
-        private Builder() {
-
-        }
+        @SuppressWarnings("unused")
+        private Builder() {}
 
         Builder(Context applicationContext) {
             mApplicationContext = applicationContext;
@@ -140,7 +140,7 @@ public class FloatWindow {
          * @param show 过滤类型,子类类型也会生效
          * @param activities 过滤界面
          */
-        public Builder setFilter(boolean show, Class... activities) {
+        public Builder setFilter(boolean show, Class<?>... activities) {
             mShow = show;
             mActivities = activities;
             return this;

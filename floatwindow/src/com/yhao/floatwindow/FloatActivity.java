@@ -1,5 +1,8 @@
 package com.yhao.floatwindow;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
@@ -7,10 +10,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.Settings;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * 用于在内部自动申请权限 https://github.com/yhaolpz

@@ -91,18 +91,13 @@ class Miui {
     }
 
     private static void req_(final Context context) {
-        switch (getProp()) {
-            case miui5:
-                reqForMiui5(context);
-                break;
-            case miui6:
-            case miui7:
-                reqForMiui67(context);
-                break;
-            case miui8:
-            case miui9:
-                reqForMiui89(context);
-                break;
+        String prop = getProp();
+        if (miui5.equals(prop)) {
+            reqForMiui5(context);
+        } else if (miui6.equals(prop) || miui7.equals(prop)) {
+            reqForMiui67(context);
+        } else if (miui8.equals(prop) || miui9.equals(prop)) {
+            reqForMiui89(context);
         }
         FloatLifecycle.setResumedListener(new ResumedListener() {
             @Override
@@ -164,6 +159,7 @@ class Miui {
     /**
      * 有些机型在添加TYPE-TOAST类型时会自动改为TYPE_SYSTEM_ALERT，通过此方法可以屏蔽修改 但是...即使成功显示出悬浮窗，移动的话也会崩溃
      */
+    @SuppressWarnings("unused")
     private static void addViewToWindow(WindowManager wm, View view, WindowManager.LayoutParams params) {
         setMiUI_International(true);
         wm.addView(view, params);

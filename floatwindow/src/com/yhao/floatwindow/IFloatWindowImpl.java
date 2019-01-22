@@ -24,7 +24,7 @@ public class IFloatWindowImpl extends IFloatWindow {
 
     private FloatWindow.Builder mB;
     private FloatView mFloatView;
-    private FloatLifecycle mFloatLifecycle;
+    // private FloatLifecycle mFloatLifecycle;
     private boolean isShow;
     private boolean once = true;
     private ValueAnimator mAnimator;
@@ -54,7 +54,9 @@ public class IFloatWindowImpl extends IFloatWindow {
         mFloatView.setSize(mB.mWidth, mB.mHeight);
         mFloatView.setGravity(mB.gravity, mB.xOffset, mB.yOffset);
         mFloatView.setView(mB.mView);
-        mFloatLifecycle = new FloatLifecycle(mB.mApplicationContext, mB.mShow, mB.mActivities, new LifecycleListener() {
+        // mFloatLifecycle = new FloatLifecycle(mB.mApplicationContext, mB.mShow, mB.mActivities, new
+        // LifecycleListener() {
+        new FloatLifecycle(mB.mApplicationContext, mB.mShow, mB.mActivities, new LifecycleListener() {
             @Override
             public void onShow() {
                 show();
