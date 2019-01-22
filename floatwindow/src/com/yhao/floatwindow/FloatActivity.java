@@ -1,4 +1,4 @@
-package com.yhao.floatwindow.permission;
+package com.yhao.floatwindow;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
@@ -15,6 +15,7 @@ import java.util.List;
 /**
  * 用于在内部自动申请权限 https://github.com/yhaolpz
  */
+
 public class FloatActivity extends Activity {
 
     private static List<PermissionListener> mPermissionListenerList;
@@ -30,7 +31,8 @@ public class FloatActivity extends Activity {
 
     @TargetApi(23)
     private void requestAlertWindowPermission() {
-        Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION);
+        // Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION);
+        Intent intent = new Intent("android.settings.action.MANAGE_OVERLAY_PERMISSION");
         intent.setData(Uri.parse("package:" + getPackageName()));
         startActivityForResult(intent, 756232212);
     }
@@ -48,7 +50,7 @@ public class FloatActivity extends Activity {
         finish();
     }
 
-    public static synchronized void request(Context context, PermissionListener permissionListener) {
+    static synchronized void request(Context context, PermissionListener permissionListener) {
         if (PermissionUtil.hasPermission(context)) {
             permissionListener.onSuccess();
             return;

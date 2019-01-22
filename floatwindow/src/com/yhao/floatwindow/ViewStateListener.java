@@ -1,7 +1,8 @@
-package com.yhao.floatwindow.interfaces;
+package com.yhao.floatwindow;
 
 /**
- * Created by yhao on 2018/5/5 https://github.com/yhaolpz
+ * Created by yhao on 2018/5/5
+ * https://github.com/yhaolpz
  */
 public interface ViewStateListener {
     void onPositionUpdate(int x, int y);

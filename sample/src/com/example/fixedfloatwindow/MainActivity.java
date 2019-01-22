@@ -1,22 +1,22 @@
 package com.example.fixedfloatwindow;
 
+import java.lang.reflect.Method;
+
+import com.yhao.floatwindow.FloatWindow;
+import com.yhao.floatwindow.IFloatWindow;
+import com.yhao.floatwindow.annotation.MoveType;
+import com.yhao.floatwindow.annotation.Screen;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.BounceInterpolator;
 import android.widget.ImageView;
-
-import com.yhao.floatwindow.FloatWindow;
-import com.yhao.floatwindow.intdef.MoveType;
-import com.yhao.floatwindow.intdef.Screen;
-import com.yhao.floatwindow.interfaces.IFloatWindow;
-import com.yhao.floatwindow.utils.LogUtil;
-import com.yhao.floatwindow.utils.T;
-
-import java.lang.reflect.Method;
+import android.widget.Toast;
 
 public class MainActivity extends Activity {
 
@@ -37,9 +37,9 @@ public class MainActivity extends Activity {
         mImageView = new ImageView(getApplicationContext());
         mImageView2 = new ImageView(getApplicationContext());
         mBuilderA = FloatWindow.with(getApplicationContext()).setView(mImageView).setWidth(Screen.width, 0.2f)
-                .setHeight(Screen.width, 0.2f).setX(Screen.width, 0.8f).setY(Screen.height, 0.3f)
-                .setMoveType(MoveType.slide).setMoveStyle(500, new BounceInterpolator()).setDesktopShow(true)
-                .setTag("mFirstWindow");
+            .setHeight(Screen.width, 0.2f).setX(Screen.width, 0.8f).setY(Screen.height, 0.3f)
+            .setMoveType(MoveType.slide).setMoveStyle(500, new BounceInterpolator()).setDesktopShow(true)
+            .setTag("mFirstWindow");
 
     }
 
@@ -51,10 +51,12 @@ public class MainActivity extends Activity {
                 startActivity(new Intent(this, ActivityB.class));
                 break;
             case R.id.btnReqPermission:
-                FloatWindow.prepare(this);
+                // FloatWindow.prepare(this);
                 break;
             case R.id.btnOnlyBuild:
-                mBuilderA.build();
+                if (mBuilderA != null) {
+                    mBuilderA.build();
+                }
                 break;
             case R.id.btnInitAndShowA:
 
@@ -81,13 +83,13 @@ public class MainActivity extends Activity {
                 break;
             case R.id.btnIsVisable1:
 
-                IFloatWindow f = FloatWindow.get("mFirstWindow");
-                if (f != null) {
-                    boolean isv = f.isViewVisible();
-                    alert("悬浮窗展示状态:" + isv);
-                } else {
-                    alert("窗口一未创建");
-                }
+                // IFloatWindow f = FloatWindow.get("mFirstWindow");
+                // if (f != null) {
+                // boolean isv = f.isViewVisible();
+                // alert("悬浮窗展示状态:" + isv);
+                // } else {
+                // alert("窗口一未创建");
+                // }
                 break;
             default:
                 break;
@@ -95,8 +97,8 @@ public class MainActivity extends Activity {
     }
 
     private void alert(String status) {
-        T.show(this, status);
-        LogUtil.i(status);
+        Toast.makeText(this, status, Toast.LENGTH_LONG).show();
+        Log.i("sanbo", status);
     }
 
     @Override
