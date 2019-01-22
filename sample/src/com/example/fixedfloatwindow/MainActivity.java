@@ -37,9 +37,9 @@ public class MainActivity extends Activity {
         mImageView = new ImageView(getApplicationContext());
         mImageView2 = new ImageView(getApplicationContext());
         mBuilderA = FloatWindow.with(getApplicationContext()).setView(mImageView).setWidth(Screen.WIDTH, 0.2f)
-                .setHeight(Screen.WIDTH, 0.2f).setX(Screen.WIDTH, 0.8f).setY(Screen.HEIGHT, 0.3f)
-                .setMoveType(MoveType.SLIDE).setMoveStyle(500, new BounceInterpolator()).setDesktopShow(true)
-                .setTag("mFirstWindow");
+            .setHeight(Screen.WIDTH, 0.2f).setX(Screen.WIDTH, 0.8f).setY(Screen.HEIGHT, 0.3f)
+            .setMoveType(MoveType.SLIDE).setMoveStyle(500, new BounceInterpolator()).setDesktopShow(true)
+            .setTag("mFirstWindow");
 
     }
 
@@ -54,9 +54,9 @@ public class MainActivity extends Activity {
                 // FloatWindow.prepare(this);
                 break;
             case R.id.btnOnlyBuild:
-                if (mBuilderA != null) {
-                    mBuilderA.build();
-                }
+                // if (mBuilderA != null) {
+                // mBuilderA.build();
+                // }
                 break;
             case R.id.btnInitAndShowA:
 

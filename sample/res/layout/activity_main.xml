@@ -2,18 +2,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context="com.example.fixedfloatwindow.MainActivity">
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.example.fixedfloatwindow.MainActivity" >
 
     <Button
         android:id="@+id/btnReqPermission"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignRight="@+id/btnOpenActivityB"
         android:layout_alignParentTop="true"
+        android:layout_alignRight="@+id/btnOpenActivityB"
         android:layout_marginTop="16dp"
         android:onClick="onClick"
         android:text="申请权限且不构建" />
@@ -22,8 +22,8 @@
         android:id="@+id/btnInitAndShowA"
         android:layout_width="wrap_content"
         android:layout_height="45dp"
-        android:layout_below="@+id/btnReqPermission"
         android:layout_alignRight="@+id/btnIsVisable1"
+        android:layout_below="@+id/btnReqPermission"
         android:layout_marginTop="29dp"
         android:onClick="onClick"
         android:text="初始化展示" />
@@ -32,8 +32,8 @@
         android:id="@+id/btnIsVisable1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/btnInitAndShowA"
         android:layout_alignRight="@+id/btnOnlyBuild"
+        android:layout_below="@+id/btnInitAndShowA"
         android:onClick="onClick"
         android:text="判断是否可见" />
 
@@ -41,8 +41,8 @@
         android:id="@+id/btnDissmissA"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/btnInitAndShowA"
         android:layout_alignParentLeft="true"
+        android:layout_alignTop="@+id/btnInitAndShowA"
         android:onClick="onClick"
         android:text="销毁悬浮窗" />
 
@@ -50,8 +50,8 @@
         android:id="@+id/btnOpenActivityB"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/btnIsVisable1"
         android:layout_alignRight="@+id/btnDissmissA"
+        android:layout_below="@+id/btnIsVisable1"
         android:onClick="onClick"
         android:text="打开 B 界面" />
 
@@ -59,8 +59,8 @@
         android:id="@+id/btnOnlyBuild"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/btnOpenActivityB"
         android:layout_alignParentRight="true"
+        android:layout_below="@+id/btnOpenActivityB"
         android:onClick="onClick"
         android:text="构建不加载" />
 
@@ -68,8 +68,8 @@
         android:id="@+id/btnHideA"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/btnIsVisable1"
         android:layout_alignBottom="@+id/btnReqPermission"
+        android:layout_alignLeft="@+id/btnIsVisable1"
         android:onClick="onClick"
         android:text="隐藏悬浮窗" />
 
