@@ -45,7 +45,8 @@ public class IFloatWindowImpl extends BaseFloatWindow {
     private int mSlop;
 
     @SuppressWarnings("unused")
-    private IFloatWindowImpl() {}
+    private IFloatWindowImpl() {
+    }
 
     public IFloatWindowImpl(FloatWindow.Builder b) {
         mBuilder = b;
@@ -66,27 +67,27 @@ public class IFloatWindowImpl extends BaseFloatWindow {
         // mBuilder.mActivities, new
         // LifecycleListener() {
         new FloatLifecycleReceiver(mBuilder.mApplicationContext, mBuilder.mShow, mBuilder.mActivities,
-            new LifecycleListener() {
-                @Override
-                public void onShow() {
-                    show();
-                }
+                new LifecycleListener() {
+                    @Override
+                    public void onShow() {
+                        show();
+                    }
 
-                @Override
-                public void onHide() {
-                    hide();
-                }
-
-                @Override
-                public void onBackToDesktop() {
-                    if (!mBuilder.mDesktopShow) {
+                    @Override
+                    public void onHide() {
                         hide();
                     }
-                    if (mBuilder.mViewStateListener != null) {
-                        mBuilder.mViewStateListener.onBackToDesktop();
+
+                    @Override
+                    public void onBackToDesktop() {
+                        if (!mBuilder.mDesktopShow) {
+                            hide();
+                        }
+                        if (mBuilder.mViewStateListener != null) {
+                            mBuilder.mViewStateListener.onBackToDesktop();
+                        }
                     }
-                }
-            });
+                });
     }
 
     @Override
@@ -150,8 +151,8 @@ public class IFloatWindowImpl extends BaseFloatWindow {
     @Override
     public void updateX(int screenType, float ratio) {
         checkMoveType();
-        mBuilder.xOffset = (int)((screenType == Screen.WIDTH ? Util.getScreenWidth(mBuilder.mApplicationContext)
-            : Util.getScreenHeight(mBuilder.mApplicationContext)) * ratio);
+        mBuilder.xOffset = (int) ((screenType == Screen.WIDTH ? Util.getScreenWidth(mBuilder.mApplicationContext)
+                : Util.getScreenHeight(mBuilder.mApplicationContext)) * ratio);
         mFloatView.updateX(mBuilder.xOffset);
 
     }
@@ -159,8 +160,8 @@ public class IFloatWindowImpl extends BaseFloatWindow {
     @Override
     public void updateY(int screenType, float ratio) {
         checkMoveType();
-        mBuilder.yOffset = (int)((screenType == Screen.WIDTH ? Util.getScreenWidth(mBuilder.mApplicationContext)
-            : Util.getScreenHeight(mBuilder.mApplicationContext)) * ratio);
+        mBuilder.yOffset = (int) ((screenType == Screen.WIDTH ? Util.getScreenWidth(mBuilder.mApplicationContext)
+                : Util.getScreenHeight(mBuilder.mApplicationContext)) * ratio);
         mFloatView.updateY(mBuilder.yOffset);
 
     }
@@ -208,17 +209,31 @@ public class IFloatWindowImpl extends BaseFloatWindow {
                                 lastY = event.getRawY();
                                 cancelAnimator();
                                 break;
+//                            case MotionEvent.ACTION_MOVE:
+//                                changeX = event.getRawX() - lastX;
+//                                changeY = event.getRawY() - lastY;
+//                                newX = (int)(mFloatView.getX() + changeX);
+//                                newY = (int)(mFloatView.getY() + changeY);
+//                                mFloatView.updateXY(newX, newY);
+//                                if (mBuilder.mViewStateListener != null) {
+//                                    mBuilder.mViewStateListener.onPositionUpdate(newX, newY);
+//                                }
+//                                lastX = event.getRawX();
+//                                lastY = event.getRawY();
+//                                break;
                             case MotionEvent.ACTION_MOVE:
-                                changeX = event.getRawX() - lastX;
-                                changeY = event.getRawY() - lastY;
-                                newX = (int)(mFloatView.getX() + changeX);
-                                newY = (int)(mFloatView.getY() + changeY);
-                                mFloatView.updateXY(newX, newY);
-                                if (mBuilder.mViewStateListener != null) {
-                                    mBuilder.mViewStateListener.onPositionUpdate(newX, newY);
+                                if (!isOutOfRange(event.getRawX(), event.getRawY())) {
+                                    changeX = event.getRawX() - lastX;
+                                    changeY = event.getRawY() - lastY;
+                                    newX = (int) (mFloatView.getX() + changeX);
+                                    newY = (int) (mFloatView.getY() + changeY);
+                                    mFloatView.updateXY(newX, newY);
+                                    if (mBuilder.mViewStateListener != null) {
+                                        mBuilder.mViewStateListener.onPositionUpdate(newX, newY);
+                                    }
+                                    lastX = event.getRawX();
+                                    lastY = event.getRawY();
                                 }
-                                lastX = event.getRawX();
-                                lastY = event.getRawY();
                                 break;
                             case MotionEvent.ACTION_UP:
                                 upX = event.getRawX();
@@ -228,18 +243,18 @@ public class IFloatWindowImpl extends BaseFloatWindow {
                                     case MoveType.SLIDE:
                                         int startX = mFloatView.getX();
                                         int endX = (startX * 2 + v.getWidth() > Util
-                                            .getScreenWidth(mBuilder.mApplicationContext))
+                                                .getScreenWidth(mBuilder.mApplicationContext))
                                                 ? Util.getScreenWidth(mBuilder.mApplicationContext) - v.getWidth()
-                                                    - mBuilder.mSlideRightMargin
+                                                - mBuilder.mSlideRightMargin
                                                 : mBuilder.mSlideLeftMargin;
                                         mAnimator = ObjectAnimator.ofInt(startX, endX);
                                         mAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                                             @Override
                                             public void onAnimationUpdate(ValueAnimator animation) {
-                                                int x = (Integer)animation.getAnimatedValue();
+                                                int x = (Integer) animation.getAnimatedValue();
                                                 mFloatView.updateX(x);
                                                 if (mBuilder.mViewStateListener != null) {
-                                                    mBuilder.mViewStateListener.onPositionUpdate(x, (int)upY);
+                                                    mBuilder.mViewStateListener.onPositionUpdate(x, (int) upY);
                                                 }
                                             }
                                         });
@@ -247,15 +262,15 @@ public class IFloatWindowImpl extends BaseFloatWindow {
                                         break;
                                     case MoveType.BACK:
                                         PropertyValuesHolder pvhX =
-                                            PropertyValuesHolder.ofInt("x", mFloatView.getX(), mBuilder.xOffset);
+                                                PropertyValuesHolder.ofInt("x", mFloatView.getX(), mBuilder.xOffset);
                                         PropertyValuesHolder pvhY =
-                                            PropertyValuesHolder.ofInt("y", mFloatView.getY(), mBuilder.yOffset);
+                                                PropertyValuesHolder.ofInt("y", mFloatView.getY(), mBuilder.yOffset);
                                         mAnimator = ObjectAnimator.ofPropertyValuesHolder(pvhX, pvhY);
                                         mAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                                             @Override
                                             public void onAnimationUpdate(ValueAnimator animation) {
-                                                int x = (Integer)animation.getAnimatedValue("x");
-                                                int y = (Integer)animation.getAnimatedValue("y");
+                                                int x = (Integer) animation.getAnimatedValue("x");
+                                                int y = (Integer) animation.getAnimatedValue("y");
                                                 mFloatView.updateXY(x, y);
                                                 if (mBuilder.mViewStateListener != null) {
                                                     mBuilder.mViewStateListener.onPositionUpdate(x, y);
@@ -275,6 +290,29 @@ public class IFloatWindowImpl extends BaseFloatWindow {
                     }
                 });
         }
+    }
+
+
+    /**
+     * 判断是否超出范围，根据自己需求设置比例大小，我自己设置的是0.025和0.975
+     *
+     * @param x event.getRawX()
+     * @param y event.getRawY()
+     * @return
+     */
+    private boolean isOutOfRange(float x, float y) {
+        boolean b = true;
+        float screenWidth = Util.getScreenWidth(mBuilder.mApplicationContext);
+        float screenHeight = Util.getScreenHeight(mBuilder.mApplicationContext);
+        float widthRate, heightRate;
+        widthRate = (screenWidth - x) / screenWidth;
+        heightRate = (screenHeight - y) / screenHeight;
+        if (widthRate > 0.025 && widthRate < 0.975 && heightRate > 0.025 && heightRate < 0.975) {
+            b = false;
+        } else {
+            b = true;
+        }
+        return b;
     }
 
     private void startAnimator() {
