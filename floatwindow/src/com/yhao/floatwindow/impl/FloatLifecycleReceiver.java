@@ -14,15 +14,12 @@ import com.yhao.floatwindow.interfaces.ResumedListener;
 
 /**
  * @Copyright © 2017 Analysys Inc. All rights reserved.
- * @Description:
- * 
- *               <pre>
+ * @Description: <pre>
  * 用于控制悬浮窗显示周期 使用了三种方法针对返回桌面时隐藏悬浮按钮
  *  1. startCount计数，针对back到桌面可以及时隐藏
  *  2.监听home键，从而及时隐藏
  *  3.resumeCount计时，针对一些只执行onPause不执行onStop的奇葩情况
  *               </pre>
- * 
  * @Version: 1.0.9
  * @Create: 2017-12-1 17:04:11
  * @Author: yhao
@@ -43,13 +40,13 @@ public class FloatLifecycleReceiver extends BroadcastReceiver implements Applica
     private LifecycleListener mLifecycleListener;
 
     public FloatLifecycleReceiver(Context applicationContext, boolean showFlag, Class<?>[] activities,
-        LifecycleListener lifecycleListener) {
+                                  LifecycleListener lifecycleListener) {
         this.showFlag = showFlag;
         this.activities = activities;
         num++;
         mLifecycleListener = lifecycleListener;
         mHandler = new Handler();
-        ((Application)applicationContext).registerActivityLifecycleCallbacks(this);
+        ((Application) applicationContext).registerActivityLifecycleCallbacks(this);
         applicationContext.registerReceiver(this, new IntentFilter(Intent.ACTION_CLOSE_SYSTEM_DIALOGS));
     }
 
@@ -143,4 +140,8 @@ public class FloatLifecycleReceiver extends BroadcastReceiver implements Applica
 
     }
 
+    public void unRegisterReceiver(Context context) {
+        ((Application) context).unregisterActivityLifecycleCallbacks(this);
+        context.unregisterReceiver(this);
+    }
 }

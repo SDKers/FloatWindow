@@ -32,7 +32,7 @@ public class IFloatWindowImpl extends BaseFloatWindow {
 
     private FloatWindow.Builder mBuilder;
     private BaseFloatView mFloatView;
-    // private FloatLifecycleReceiver mFloatLifecycle;
+    private FloatLifecycleReceiver mFloatLifecycle;
     private boolean isShow;
     private boolean once = true;
     private ValueAnimator mAnimator;
@@ -63,31 +63,30 @@ public class IFloatWindowImpl extends BaseFloatWindow {
         mFloatView.setSize(mBuilder.mWidth, mBuilder.mHeight);
         mFloatView.setGravity(mBuilder.gravity, mBuilder.xOffset, mBuilder.yOffset);
         mFloatView.setView(mBuilder.mView);
-        // mFloatLifecycle = new FloatLifecycleReceiver(mBuilder.mApplicationContext, mBuilder.mShow,
-        // mBuilder.mActivities, new
-        // LifecycleListener() {
-        new FloatLifecycleReceiver(mBuilder.mApplicationContext, mBuilder.mShow, mBuilder.mActivities,
-                new LifecycleListener() {
-                    @Override
-                    public void onShow() {
-                        show();
-                    }
+        mFloatLifecycle = new FloatLifecycleReceiver(mBuilder.mApplicationContext, mBuilder.mShow,
+                mBuilder.mActivities, new LifecycleListener() {
+            //        new FloatLifecycleReceiver(mBuilder.mApplicationContext, mBuilder.mShow, mBuilder.mActivities,
+//                new LifecycleListener() {
+            @Override
+            public void onShow() {
+                show();
+            }
 
-                    @Override
-                    public void onHide() {
-                        hide();
-                    }
+            @Override
+            public void onHide() {
+                hide();
+            }
 
-                    @Override
-                    public void onBackToDesktop() {
-                        if (!mBuilder.mDesktopShow) {
-                            hide();
-                        }
-                        if (mBuilder.mViewStateListener != null) {
-                            mBuilder.mViewStateListener.onBackToDesktop();
-                        }
-                    }
-                });
+            @Override
+            public void onBackToDesktop() {
+                if (!mBuilder.mDesktopShow) {
+                    hide();
+                }
+                if (mBuilder.mViewStateListener != null) {
+                    mBuilder.mViewStateListener.onBackToDesktop();
+                }
+            }
+        });
     }
 
     @Override
@@ -131,6 +130,17 @@ public class IFloatWindowImpl extends BaseFloatWindow {
         isShow = false;
         if (mBuilder.mViewStateListener != null) {
             mBuilder.mViewStateListener.onDismiss();
+        }
+    }
+
+    @Override
+    public void destory() {
+        if (mFloatLifecycle != null) {
+            mFloatLifecycle.unRegisterReceiver(mBuilder.mApplicationContext);
+
+        }
+        if (mAnimator != null && mAnimator.isRunning()) {
+            mAnimator.cancel();
         }
     }
 
@@ -292,6 +302,11 @@ public class IFloatWindowImpl extends BaseFloatWindow {
         }
     }
 
+    private void cancelAnimator() {
+        if (mAnimator != null && mAnimator.isRunning()) {
+            mAnimator.cancel();
+        }
+    }
 
     /**
      * 判断是否超出范围，根据自己需求设置比例大小，我自己设置的是0.025和0.975
@@ -340,10 +355,5 @@ public class IFloatWindowImpl extends BaseFloatWindow {
         }
     }
 
-    private void cancelAnimator() {
-        if (mAnimator != null && mAnimator.isRunning()) {
-            mAnimator.cancel();
-        }
-    }
 
 }

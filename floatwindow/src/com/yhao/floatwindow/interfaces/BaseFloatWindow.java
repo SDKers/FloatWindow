@@ -33,4 +33,6 @@ public abstract class BaseFloatWindow {
     public abstract View getView();
 
     public abstract void dismiss();
+
+    public abstract void destory();
 }
