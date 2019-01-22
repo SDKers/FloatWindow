@@ -40,10 +40,10 @@ public class FloatWindow {
     }
 
     public static void prepare(Context context) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
+        if (Build.VERSION.SDK_INT >= 25) {
             PermissionUtil.req(context);
         } else if (Miui.rom() || DeviceType.isOppo()) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (Build.VERSION.SDK_INT >= 23) {
                 PermissionUtil.req(context);
             } else {
                 Miui.req(context, new PermissionListener() {

@@ -29,13 +29,13 @@ class FloatPhone extends FloatView {
     FloatPhone(Context applicationContext, PermissionListener permissionListener) {
         mContext = applicationContext;
         mPermissionListener = permissionListener;
-        mWindowManager = (WindowManager)applicationContext.getSystemService(Context.WINDOW_SERVICE);
+        mWindowManager = (WindowManager) applicationContext.getSystemService(Context.WINDOW_SERVICE);
         mLayoutParams = new WindowManager.LayoutParams();
         mLayoutParams.format = PixelFormat.RGBA_8888;
         // mLayoutParams.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL |
         // WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
         mLayoutParams.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
-            | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS;
+                | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS;
         mLayoutParams.windowAnimations = 0;
     }
 
@@ -60,10 +60,11 @@ class FloatPhone extends FloatView {
     @SuppressWarnings("deprecation")
     @Override
     public void init() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1) {
+        if (Build.VERSION.SDK_INT >= 25) {
             req();
         } else if (Miui.rom() || DeviceType.isOppo()) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (Build.VERSION.SDK_INT >= 23) {
                 req();
             } else {
                 mLayoutParams.type = WindowManager.LayoutParams.TYPE_PHONE;
@@ -98,10 +99,12 @@ class FloatPhone extends FloatView {
 
     @SuppressWarnings("deprecation")
     private void req() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            mLayoutParams.type = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;
+        if (Build.VERSION.SDK_INT >= 26) {
+//            mLayoutParams.type = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;
+            mLayoutParams.type = 2038;
         } else {
-            mLayoutParams.type = WindowManager.LayoutParams.TYPE_PHONE;
+//            mLayoutParams.type = WindowManager.LayoutParams.TYPE_PHONE;
+            mLayoutParams.type = 2002;
         }
         FloatActivity.request(mContext, new PermissionListener() {
             @Override

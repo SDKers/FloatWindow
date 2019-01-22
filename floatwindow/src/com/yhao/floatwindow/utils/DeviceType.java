@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Locale;
 
 /**
  * @Copyright © 2018 EGuan Inc. All rights reserved.
@@ -91,11 +92,11 @@ public class DeviceType {
             sName = ROM_SMARTISAN;
         } else {
             sVersion = Build.DISPLAY;
-            if (sVersion.toUpperCase().contains(ROM_FLYME)) {
+            if (sVersion.toUpperCase(Locale.getDefault()).contains(ROM_FLYME)) {
                 sName = ROM_FLYME;
             } else {
                 sVersion = Build.UNKNOWN;
-                sName = Build.MANUFACTURER.toUpperCase();
+                sName = Build.MANUFACTURER.toUpperCase(Locale.getDefault());
             }
         }
         return sName.equals(rom);

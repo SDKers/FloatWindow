@@ -1,14 +1,5 @@
 package com.example.fixedfloatwindow;
 
-import java.lang.reflect.Method;
-
-import com.yhao.floatwindow.FloatWindow;
-import com.yhao.floatwindow.intdef.MoveType;
-import com.yhao.floatwindow.intdef.Screen;
-import com.yhao.floatwindow.interfaces.IFloatWindow;
-import com.yhao.floatwindow.utils.LogUtil;
-import com.yhao.floatwindow.utils.T;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,6 +8,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.BounceInterpolator;
 import android.widget.ImageView;
+
+import com.yhao.floatwindow.FloatWindow;
+import com.yhao.floatwindow.intdef.MoveType;
+import com.yhao.floatwindow.intdef.Screen;
+import com.yhao.floatwindow.interfaces.IFloatWindow;
+import com.yhao.floatwindow.utils.LogUtil;
+import com.yhao.floatwindow.utils.T;
+
+import java.lang.reflect.Method;
 
 public class MainActivity extends Activity {
 
@@ -37,18 +37,18 @@ public class MainActivity extends Activity {
         mImageView = new ImageView(getApplicationContext());
         mImageView2 = new ImageView(getApplicationContext());
         mBuilderA = FloatWindow.with(getApplicationContext()).setView(mImageView).setWidth(Screen.width, 0.2f)
-            .setHeight(Screen.width, 0.2f).setX(Screen.width, 0.8f).setY(Screen.height, 0.3f)
-            .setMoveType(MoveType.slide).setMoveStyle(500, new BounceInterpolator()).setDesktopShow(true)
-            .setTag("mFirstWindow");
+                .setHeight(Screen.width, 0.2f).setX(Screen.width, 0.8f).setY(Screen.height, 0.3f)
+                .setMoveType(MoveType.slide).setMoveStyle(500, new BounceInterpolator()).setDesktopShow(true)
+                .setTag("mFirstWindow");
 
     }
 
     public void onClick(View view) {
-        mImageView.setImageResource(R.drawable.icon);
-        mImageView2.setImageResource(R.drawable.ic_launcher_round);
+        mImageView.setImageResource(R.drawable.c_outline_add_circle_outline_black_48dp);
+        mImageView2.setImageResource(R.drawable.c_outline_settings_black_48dp);
         switch (view.getId()) {
             case R.id.btnOpenActivityB:
-                startActivity(new Intent(this, B_Activity.class));
+                startActivity(new Intent(this, ActivityB.class));
                 break;
             case R.id.btnReqPermission:
                 FloatWindow.prepare(this);

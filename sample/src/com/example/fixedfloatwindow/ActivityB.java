@@ -4,7 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
-public class B_Activity extends BaseActivity {
+public class ActivityB extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -14,7 +14,7 @@ public class B_Activity extends BaseActivity {
     }
 
     public void change(View view) {
-        startActivity(new Intent(this, C_Activity.class));
+        startActivity(new Intent(this, ActivityC.class));
     }
 
     public void back(View view) {

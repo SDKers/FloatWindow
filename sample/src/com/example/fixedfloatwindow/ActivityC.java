@@ -3,7 +3,7 @@ package com.example.fixedfloatwindow;
 import android.os.Bundle;
 import android.view.View;
 
-public class C_Activity extends BaseActivity {
+public class ActivityC extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -1,9 +1,5 @@
 package com.yhao.floatwindow.permission;
 
-import java.lang.reflect.Method;
-
-import com.yhao.floatwindow.utils.LogUtil;
-
 import android.annotation.TargetApi;
 import android.app.AppOpsManager;
 import android.content.Context;
@@ -15,6 +11,10 @@ import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 
+import com.yhao.floatwindow.utils.LogUtil;
+
+import java.lang.reflect.Method;
+
 /**
  * Created by yhao on 2017/12/29. https://github.com/yhaolpz
  */
@@ -25,10 +25,12 @@ public class PermissionUtil {
         }
         FloatActivity.request(context, new PermissionListener() {
             @Override
-            public void onSuccess() {}
+            public void onSuccess() {
+            }
 
             @Override
-            public void onFail() {}
+            public void onFail() {
+            }
         });
     }
 
@@ -56,11 +58,11 @@ public class PermissionUtil {
      */
     static boolean hasPermissionBelowMarshmallow(Context context) {
         try {
-            AppOpsManager manager = (AppOpsManager)context.getSystemService(Context.APP_OPS_SERVICE);
+            AppOpsManager manager = (AppOpsManager) context.getSystemService(Context.APP_OPS_SERVICE);
             Method dispatchMethod = AppOpsManager.class.getMethod("checkOp", int.class, int.class, String.class);
             // AppOpsManager.OP_SYSTEM_ALERT_WINDOW = 24
-            return AppOpsManager.MODE_ALLOWED == (Integer)dispatchMethod.invoke(manager, 24, Binder.getCallingUid(),
-                context.getApplicationContext().getPackageName());
+            return AppOpsManager.MODE_ALLOWED == (Integer) dispatchMethod.invoke(manager, 24, Binder.getCallingUid(),
+                    context.getApplicationContext().getPackageName());
         } catch (Exception e) {
             return false;
         }
@@ -73,16 +75,22 @@ public class PermissionUtil {
     @TargetApi(23)
     private static boolean hasPermissionForO(Context context) {
         try {
-            WindowManager mgr = (WindowManager)context.getSystemService(Context.WINDOW_SERVICE);
-            if (mgr == null)
+            WindowManager mgr = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+            if (mgr == null) {
                 return false;
+            }
             View viewToAdd = new View(context);
-            WindowManager.LayoutParams params = new WindowManager.LayoutParams(0, 0,
-                android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O
-                    ? WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
-                    : WindowManager.LayoutParams.TYPE_SYSTEM_ALERT,
-                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
-                PixelFormat.TRANSPARENT);
+            WindowManager.LayoutParams params = new WindowManager.LayoutParams(
+                    0,
+                    0,
+//                android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O
+//                    ? WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
+//                    : WindowManager.LayoutParams.TYPE_SYSTEM_ALERT,
+//                    WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
+                    android.os.Build.VERSION.SDK_INT >= 26 ? 2038 : 2003,
+                    0x00000010 | 0x00000008,
+                    -2);
+//                    PixelFormat.TRANSPARENT);
             viewToAdd.setLayoutParams(params);
             mgr.addView(viewToAdd, params);
             mgr.removeView(viewToAdd);
