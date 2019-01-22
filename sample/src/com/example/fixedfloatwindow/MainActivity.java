@@ -1,12 +1,5 @@
 package com.example.fixedfloatwindow;
 
-import java.lang.reflect.Method;
-
-import com.yhao.floatwindow.FloatWindow;
-import com.yhao.floatwindow.IFloatWindow;
-import com.yhao.floatwindow.annotation.MoveType;
-import com.yhao.floatwindow.annotation.Screen;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,12 +11,19 @@ import android.view.animation.BounceInterpolator;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.yhao.floatwindow.FloatWindow;
+import com.yhao.floatwindow.annotation.MoveType;
+import com.yhao.floatwindow.annotation.Screen;
+import com.yhao.floatwindow.interfaces.BaseFloatWindow;
+
+import java.lang.reflect.Method;
+
 public class MainActivity extends Activity {
 
     private ImageView mImageView = null;
     private ImageView mImageView2 = null;
     private FloatWindow.Builder mBuilderA = null;
-    private IFloatWindow mFirstWindow = null;
+    private BaseFloatWindow mFirstWindow = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,10 +36,10 @@ public class MainActivity extends Activity {
     private void initUI() {
         mImageView = new ImageView(getApplicationContext());
         mImageView2 = new ImageView(getApplicationContext());
-        mBuilderA = FloatWindow.with(getApplicationContext()).setView(mImageView).setWidth(Screen.width, 0.2f)
-            .setHeight(Screen.width, 0.2f).setX(Screen.width, 0.8f).setY(Screen.height, 0.3f)
-            .setMoveType(MoveType.slide).setMoveStyle(500, new BounceInterpolator()).setDesktopShow(true)
-            .setTag("mFirstWindow");
+        mBuilderA = FloatWindow.with(getApplicationContext()).setView(mImageView).setWidth(Screen.WIDTH, 0.2f)
+                .setHeight(Screen.WIDTH, 0.2f).setX(Screen.WIDTH, 0.8f).setY(Screen.HEIGHT, 0.3f)
+                .setMoveType(MoveType.SLIDE).setMoveStyle(500, new BounceInterpolator()).setDesktopShow(true)
+                .setTag("mFirstWindow");
 
     }
 
@@ -83,7 +83,7 @@ public class MainActivity extends Activity {
                 break;
             case R.id.btnIsVisable1:
 
-                // IFloatWindow f = FloatWindow.get("mFirstWindow");
+                // BaseFloatWindow f = FloatWindow.get("mFirstWindow");
                 // if (f != null) {
                 // boolean isv = f.isViewVisible();
                 // alert("悬浮窗展示状态:" + isv);

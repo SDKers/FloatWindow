@@ -1,4 +1,4 @@
-package com.yhao.floatwindow;
+package com.yhao.floatwindow.utils;
 
 import android.content.Context;
 import android.graphics.Point;
@@ -8,19 +8,22 @@ import android.view.View;
 import android.view.WindowManager;
 
 /**
- * Created by yhao on 2017/12/22. https://github.com/yhaolpz
+ * @Copyright © 2017 Analysys Inc. All rights reserved.
+ * @Description:
+ * @Version: 1.0.9
+ * @Create: 2017/12/29 17:15:35
+ * @Author: yhao
  */
+public class Util {
 
-class Util {
+    private static Point sPoint;
 
-    static View inflate(Context applicationContext, int layoutId) {
+    public static View inflate(Context applicationContext, int layoutId) {
         LayoutInflater inflate = (LayoutInflater)applicationContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         return inflate.inflate(layoutId, null);
     }
 
-    private static Point sPoint;
-
-    static int getScreenWidth(Context context) {
+    public static int getScreenWidth(Context context) {
         if (sPoint == null) {
             sPoint = new Point();
             WindowManager wm = (WindowManager)context.getSystemService(Context.WINDOW_SERVICE);
@@ -29,7 +32,7 @@ class Util {
         return sPoint.x;
     }
 
-    static int getScreenHeight(Context context) {
+    public static int getScreenHeight(Context context) {
         if (sPoint == null) {
             sPoint = new Point();
             WindowManager wm = (WindowManager)context.getSystemService(Context.WINDOW_SERVICE);
@@ -38,7 +41,7 @@ class Util {
         return sPoint.y;
     }
 
-    static boolean isViewVisible(View view) {
+    public static boolean isViewVisible(View view) {
         return view.getGlobalVisibleRect(new Rect());
     }
 }

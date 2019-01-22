@@ -1,4 +1,4 @@
-package com.yhao.floatwindow;
+package com.yhao.floatwindow.impl;
 
 import android.app.Activity;
 import android.app.Application;
@@ -9,16 +9,31 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 
-/**
- * Created by yhao on 17-12-1. 用于控制悬浮窗显示周期 使用了三种方法针对返回桌面时隐藏悬浮按钮 1.startCount计数，针对back到桌面可以及时隐藏 2.监听home键，从而及时隐藏
- * 3.resumeCount计时，针对一些只执行onPause不执行onStop的奇葩情况
- */
+import com.yhao.floatwindow.interfaces.LifecycleListener;
+import com.yhao.floatwindow.interfaces.ResumedListener;
 
-class FloatLifecycle extends BroadcastReceiver implements Application.ActivityLifecycleCallbacks {
+/**
+ * @Copyright © 2017 Analysys Inc. All rights reserved.
+ * @Description:
+ * 
+ *               <pre>
+ * 用于控制悬浮窗显示周期 使用了三种方法针对返回桌面时隐藏悬浮按钮
+ *  1. startCount计数，针对back到桌面可以及时隐藏
+ *  2.监听home键，从而及时隐藏
+ *  3.resumeCount计时，针对一些只执行onPause不执行onStop的奇葩情况
+ *               </pre>
+ * 
+ * @Version: 1.0.9
+ * @Create: 2017-12-1 17:04:11
+ * @Author: yhao
+ */
+public class FloatLifecycleReceiver extends BroadcastReceiver implements Application.ActivityLifecycleCallbacks {
 
     private static final String SYSTEM_DIALOG_REASON_KEY = "reason";
     private static final String SYSTEM_DIALOG_REASON_HOME_KEY = "homekey";
-    private static final long delay = 300;
+    private static final long DELAY = 300;
+    private static ResumedListener sResumedListener;
+    private static int num = 0;
     private Handler mHandler;
     private Class<?>[] activities;
     private boolean showFlag;
@@ -26,10 +41,8 @@ class FloatLifecycle extends BroadcastReceiver implements Application.ActivityLi
     private int resumeCount;
     private boolean appBackground;
     private LifecycleListener mLifecycleListener;
-    private static ResumedListener sResumedListener;
-    private static int num = 0;
 
-    FloatLifecycle(Context applicationContext, boolean showFlag, Class<?>[] activities,
+    public FloatLifecycleReceiver(Context applicationContext, boolean showFlag, Class<?>[] activities,
         LifecycleListener lifecycleListener) {
         this.showFlag = showFlag;
         this.activities = activities;
@@ -87,7 +100,7 @@ class FloatLifecycle extends BroadcastReceiver implements Application.ActivityLi
                     mLifecycleListener.onBackToDesktop();
                 }
             }
-        }, delay);
+        }, DELAY);
 
     }
 

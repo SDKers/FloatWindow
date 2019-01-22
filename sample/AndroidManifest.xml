@@ -23,6 +23,13 @@
         <activity android:name="com.example.fixedfloatwindow.ActivityB" />
         <activity android:name="com.example.fixedfloatwindow.ActivityC" />
         <activity android:name="com.example.fixedfloatwindow.BaseActivity" />
+
+        <activity
+            android:name="com.yhao.floatwindow.FloatActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:launchMode="standard"
+            android:theme="@style/permission_PermissionActivity"
+            android:windowSoftInputMode="stateHidden|stateAlwaysHidden" />
     </application>
 
 </manifest>

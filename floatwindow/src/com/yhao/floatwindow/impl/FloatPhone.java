@@ -1,4 +1,4 @@
-package com.yhao.floatwindow;
+package com.yhao.floatwindow.impl;
 
 import android.content.Context;
 import android.graphics.PixelFormat;
@@ -6,12 +6,20 @@ import android.os.Build;
 import android.view.View;
 import android.view.WindowManager;
 
+import com.yhao.floatwindow.FloatActivity;
+import com.yhao.floatwindow.interfaces.BaseFloatView;
+import com.yhao.floatwindow.permission.PermissionListener;
+import com.yhao.floatwindow.utils.LogUtil;
+import com.yhao.floatwindow.utils.Miui;
+
 /**
- * Created by yhao on 17-11-14. https://github.com/yhaolpz
+ * @Copyright © 2017 Analysys Inc. All rights reserved.
+ * @Description: TODO
+ * @Version: 1.0.9
+ * @Create: 2017-11-14 17:15:35
+ * @Author: yhao
  */
-
-class FloatPhone extends FloatView {
-
+public class FloatPhone extends BaseFloatView {
     private final Context mContext;
 
     private final WindowManager mWindowManager;
@@ -21,7 +29,7 @@ class FloatPhone extends FloatView {
     private boolean isRemove = false;
     private PermissionListener mPermissionListener;
 
-    FloatPhone(Context applicationContext, PermissionListener permissionListener) {
+    public FloatPhone(Context applicationContext, PermissionListener permissionListener) {
         mContext = applicationContext;
         mPermissionListener = permissionListener;
         mWindowManager = (WindowManager)applicationContext.getSystemService(Context.WINDOW_SERVICE);
@@ -122,36 +130,39 @@ class FloatPhone extends FloatView {
 
     @Override
     public void updateXY(int x, int y) {
-        if (isRemove)
+        if (isRemove) {
             return;
+        }
         mLayoutParams.x = mX = x;
         mLayoutParams.y = mY = y;
         mWindowManager.updateViewLayout(mView, mLayoutParams);
     }
 
     @Override
-    void updateX(int x) {
-        if (isRemove)
+    public void updateX(int x) {
+        if (isRemove) {
             return;
+        }
         mLayoutParams.x = mX = x;
         mWindowManager.updateViewLayout(mView, mLayoutParams);
     }
 
     @Override
-    void updateY(int y) {
-        if (isRemove)
+    public void updateY(int y) {
+        if (isRemove) {
             return;
+        }
         mLayoutParams.y = mY = y;
         mWindowManager.updateViewLayout(mView, mLayoutParams);
     }
 
     @Override
-    int getX() {
+    public int getX() {
         return mX;
     }
 
     @Override
-    int getY() {
+    public int getY() {
         return mY;
     }
 

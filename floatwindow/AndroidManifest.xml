@@ -9,7 +9,7 @@
 
     <application>
         <activity
-            android:name="com.yhao.floatwindow.permission.FloatActivity"
+            android:name="com.yhao.floatwindow.FloatActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:launchMode="standard"
             android:theme="@style/permission_PermissionActivity"

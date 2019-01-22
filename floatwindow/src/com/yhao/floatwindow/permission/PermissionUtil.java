@@ -1,6 +1,4 @@
-package com.yhao.floatwindow;
-
-import java.lang.reflect.Method;
+package com.yhao.floatwindow.permission;
 
 import android.annotation.TargetApi;
 import android.app.AppOpsManager;
@@ -12,13 +10,20 @@ import android.provider.Settings;
 import android.view.View;
 import android.view.WindowManager;
 
+import com.yhao.floatwindow.utils.LogUtil;
+
+import java.lang.reflect.Method;
+
 /**
- * Created by yhao on 2017/12/29. https://github.com/yhaolpz
+ * @Copyright © 2017 Analysys Inc. All rights reserved.
+ * @Description:
+ * @Version: 1.0.9
+ * @Create: 2017/12/29 17:15:35
+ * @Author: yhao
  */
+public class PermissionUtil {
 
-class PermissionUtil {
-
-    static boolean hasPermission(Context context) {
+    public static boolean hasPermission(Context context) {
         if (Build.VERSION.SDK_INT >= 23) {
             return Settings.canDrawOverlays(context);
         } else {
@@ -26,7 +31,7 @@ class PermissionUtil {
         }
     }
 
-    static boolean hasPermissionOnActivityResult(Context context) {
+    public static boolean hasPermissionOnActivityResult(Context context) {
         if (Build.VERSION.SDK_INT == 26) {
             return hasPermissionForO(context);
         }
@@ -38,9 +43,9 @@ class PermissionUtil {
     }
 
     /**
-     * 6.0以下判断是否有权限 理论上6.0以上才需处理权限，但有的国内rom在6.0以下就添加了权限 其实此方式也可以用于判断6.0以上版本，只不过有更简单的canDrawOverlays代替
+     * 6.0以下判断是否有权限 理论上6.0以上才需处理权限， 但有的国内rom在6.0以下就添加了权限 其实此方式也可以用于判断6.0以上版本， 只不过有更简单的canDrawOverlays代替
      */
-    static boolean hasPermissionBelowMarshmallow(Context context) {
+    public static boolean hasPermissionBelowMarshmallow(Context context) {
         try {
             AppOpsManager manager = (AppOpsManager)context.getSystemService(Context.APP_OPS_SERVICE);
             Method dispatchMethod = AppOpsManager.class.getMethod("checkOp", int.class, int.class, String.class);
@@ -59,8 +64,9 @@ class PermissionUtil {
     private static boolean hasPermissionForO(Context context) {
         try {
             WindowManager mgr = (WindowManager)context.getSystemService(Context.WINDOW_SERVICE);
-            if (mgr == null)
+            if (mgr == null) {
                 return false;
+            }
             View viewToAdd = new View(context);
             WindowManager.LayoutParams params = new WindowManager.LayoutParams(0, 0,
                 // android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O

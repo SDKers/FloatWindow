@@ -1,4 +1,4 @@
-package com.yhao.floatwindow;
+package com.yhao.floatwindow.utils;
 
 import android.content.Context;
 import android.content.Intent;
@@ -9,19 +9,20 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 /**
- * Created by yhao on 2017/12/30.
- * https://github.com/yhaolpz
+ * @Copyright © 2017 Analysys Inc. All rights reserved.
+ * @Description:
+ * @Version: 1.0.9
+ * @Create: 2017/12/29 17:15:35
+ * @Author: yhao
  */
+public class Rom {
 
-class Rom {
-
-    static boolean isIntentAvailable(Intent intent, Context context) {
-        return intent != null && context.getPackageManager().queryIntentActivities(
-                intent, PackageManager.MATCH_DEFAULT_ONLY).size() > 0;
+    public static boolean isIntentAvailable(Intent intent, Context context) {
+        return intent != null
+            && context.getPackageManager().queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY).size() > 0;
     }
 
-
-    static String getProp(String name) {
+    public static String getProp(String name) {
         BufferedReader input = null;
         try {
             Process p = Runtime.getRuntime().exec("getprop " + name);

@@ -1,18 +1,23 @@
-package com.yhao.floatwindow;
+package com.yhao.floatwindow.impl;
 
 import android.content.Context;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Toast;
 
+import com.yhao.floatwindow.interfaces.BaseFloatView;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
 /**
- * 自定义 toast 方式，无需申请权限 当前版本暂时用 TYPE_TOAST 代替，后续版本可能会再融入此方式
+ * @Copyright © 2017 Analysys Inc. All rights reserved.
+ * @Description: 自定义 toast 方式，无需申请权限 当前版本暂时用 TYPE_TOAST 代替，后续版本可能会再融入此方式
+ * @Version: 1.0.9
+ * @Create: 2017-11-14 17:15:35
+ * @Author: yhao
  */
-
-class FloatToast extends FloatView {
+public class FloatToast extends BaseFloatView {
 
     private Toast toast;
 
@@ -23,7 +28,7 @@ class FloatToast extends FloatView {
     private int mWidth;
     private int mHeight;
 
-    FloatToast(Context applicationContext) {
+    public FloatToast(Context applicationContext) {
         toast = new Toast(applicationContext);
     }
 
