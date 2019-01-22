@@ -32,11 +32,11 @@ public class FloatPhone extends BaseFloatView {
     public FloatPhone(Context applicationContext, PermissionListener permissionListener) {
         mContext = applicationContext;
         mPermissionListener = permissionListener;
-        mWindowManager = (WindowManager)applicationContext.getSystemService(Context.WINDOW_SERVICE);
+        mWindowManager = (WindowManager) applicationContext.getSystemService(Context.WINDOW_SERVICE);
         mLayoutParams = new WindowManager.LayoutParams();
         mLayoutParams.format = PixelFormat.RGBA_8888;
         mLayoutParams.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
-            | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS;
+                | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS;
         mLayoutParams.windowAnimations = 0;
     }
 
@@ -67,7 +67,7 @@ public class FloatPhone extends BaseFloatView {
                 req();
             } else {
                 mLayoutParams.type = WindowManager.LayoutParams.TYPE_PHONE;
-                Miui.req(mContext, new PermissionListener() {
+                Miui.requestPermission(mContext, new PermissionListener() {
                     @Override
                     public void onSuccess() {
                         mWindowManager.addView(mView, mLayoutParams);

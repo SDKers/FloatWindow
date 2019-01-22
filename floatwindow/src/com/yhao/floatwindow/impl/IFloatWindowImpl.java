@@ -19,7 +19,7 @@ import com.yhao.floatwindow.annotation.Screen;
 import com.yhao.floatwindow.interfaces.BaseFloatView;
 import com.yhao.floatwindow.interfaces.BaseFloatWindow;
 import com.yhao.floatwindow.interfaces.LifecycleListener;
-import com.yhao.floatwindow.utils.Util;
+import com.yhao.floatwindow.utils.ViewUtils;
 
 /**
  * @Copyright © 2017 Analysys Inc. All rights reserved.
@@ -161,8 +161,8 @@ public class IFloatWindowImpl extends BaseFloatWindow {
     @Override
     public void updateX(int screenType, float ratio) {
         checkMoveType();
-        mBuilder.xOffset = (int) ((screenType == Screen.WIDTH ? Util.getScreenWidth(mBuilder.mApplicationContext)
-                : Util.getScreenHeight(mBuilder.mApplicationContext)) * ratio);
+        mBuilder.xOffset = (int) ((screenType == Screen.WIDTH ? ViewUtils.getScreenWidth(mBuilder.mApplicationContext)
+                : ViewUtils.getScreenHeight(mBuilder.mApplicationContext)) * ratio);
         mFloatView.updateX(mBuilder.xOffset);
 
     }
@@ -170,8 +170,8 @@ public class IFloatWindowImpl extends BaseFloatWindow {
     @Override
     public void updateY(int screenType, float ratio) {
         checkMoveType();
-        mBuilder.yOffset = (int) ((screenType == Screen.WIDTH ? Util.getScreenWidth(mBuilder.mApplicationContext)
-                : Util.getScreenHeight(mBuilder.mApplicationContext)) * ratio);
+        mBuilder.yOffset = (int) ((screenType == Screen.WIDTH ? ViewUtils.getScreenWidth(mBuilder.mApplicationContext)
+                : ViewUtils.getScreenHeight(mBuilder.mApplicationContext)) * ratio);
         mFloatView.updateY(mBuilder.yOffset);
 
     }
@@ -252,9 +252,9 @@ public class IFloatWindowImpl extends BaseFloatWindow {
                                 switch (mBuilder.mMoveType) {
                                     case MoveType.SLIDE:
                                         int startX = mFloatView.getX();
-                                        int endX = (startX * 2 + v.getWidth() > Util
+                                        int endX = (startX * 2 + v.getWidth() > ViewUtils
                                                 .getScreenWidth(mBuilder.mApplicationContext))
-                                                ? Util.getScreenWidth(mBuilder.mApplicationContext) - v.getWidth()
+                                                ? ViewUtils.getScreenWidth(mBuilder.mApplicationContext) - v.getWidth()
                                                 - mBuilder.mSlideRightMargin
                                                 : mBuilder.mSlideLeftMargin;
                                         mAnimator = ObjectAnimator.ofInt(startX, endX);
@@ -317,8 +317,8 @@ public class IFloatWindowImpl extends BaseFloatWindow {
      */
     private boolean isOutOfRange(float x, float y) {
         boolean b = true;
-        float screenWidth = Util.getScreenWidth(mBuilder.mApplicationContext);
-        float screenHeight = Util.getScreenHeight(mBuilder.mApplicationContext);
+        float screenWidth = ViewUtils.getScreenWidth(mBuilder.mApplicationContext);
+        float screenHeight = ViewUtils.getScreenHeight(mBuilder.mApplicationContext);
         float widthRate, heightRate;
         widthRate = (screenWidth - x) / screenWidth;
         heightRate = (screenHeight - y) / screenHeight;

@@ -14,19 +14,19 @@ import android.view.WindowManager;
  * @Create: 2017/12/29 17:15:35
  * @Author: yhao
  */
-public class Util {
+public class ViewUtils {
 
     private static Point sPoint;
 
     public static View inflate(Context applicationContext, int layoutId) {
-        LayoutInflater inflate = (LayoutInflater)applicationContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        LayoutInflater inflate = (LayoutInflater) applicationContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         return inflate.inflate(layoutId, null);
     }
 
     public static int getScreenWidth(Context context) {
         if (sPoint == null) {
             sPoint = new Point();
-            WindowManager wm = (WindowManager)context.getSystemService(Context.WINDOW_SERVICE);
+            WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
             wm.getDefaultDisplay().getSize(sPoint);
         }
         return sPoint.x;
@@ -35,7 +35,7 @@ public class Util {
     public static int getScreenHeight(Context context) {
         if (sPoint == null) {
             sPoint = new Point();
-            WindowManager wm = (WindowManager)context.getSystemService(Context.WINDOW_SERVICE);
+            WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
             wm.getDefaultDisplay().getSize(sPoint);
         }
         return sPoint.y;

@@ -14,7 +14,7 @@ import com.yhao.floatwindow.interfaces.BaseFloatWindow;
 import com.yhao.floatwindow.interfaces.ViewStateListener;
 import com.yhao.floatwindow.permission.PermissionListener;
 import com.yhao.floatwindow.utils.LogUtil;
-import com.yhao.floatwindow.utils.Util;
+import com.yhao.floatwindow.utils.ViewUtils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -142,14 +142,14 @@ public class FloatWindow {
         }
 
         public Builder setWidth(@Screen.screenType int screenType, float ratio) {
-            mWidth = (int) ((screenType == Screen.WIDTH ? Util.getScreenWidth(mApplicationContext)
-                    : Util.getScreenHeight(mApplicationContext)) * ratio);
+            mWidth = (int) ((screenType == Screen.WIDTH ? ViewUtils.getScreenWidth(mApplicationContext)
+                    : ViewUtils.getScreenHeight(mApplicationContext)) * ratio);
             return this;
         }
 
         public Builder setHeight(@Screen.screenType int screenType, float ratio) {
-            mHeight = (int) ((screenType == Screen.WIDTH ? Util.getScreenWidth(mApplicationContext)
-                    : Util.getScreenHeight(mApplicationContext)) * ratio);
+            mHeight = (int) ((screenType == Screen.WIDTH ? ViewUtils.getScreenWidth(mApplicationContext)
+                    : ViewUtils.getScreenHeight(mApplicationContext)) * ratio);
             return this;
         }
 
@@ -164,14 +164,14 @@ public class FloatWindow {
         }
 
         public Builder setX(@Screen.screenType int screenType, float ratio) {
-            xOffset = (int) ((screenType == Screen.WIDTH ? Util.getScreenWidth(mApplicationContext)
-                    : Util.getScreenHeight(mApplicationContext)) * ratio);
+            xOffset = (int) ((screenType == Screen.WIDTH ? ViewUtils.getScreenWidth(mApplicationContext)
+                    : ViewUtils.getScreenHeight(mApplicationContext)) * ratio);
             return this;
         }
 
         public Builder setY(@Screen.screenType int screenType, float ratio) {
-            yOffset = (int) ((screenType == Screen.WIDTH ? Util.getScreenWidth(mApplicationContext)
-                    : Util.getScreenHeight(mApplicationContext)) * ratio);
+            yOffset = (int) ((screenType == Screen.WIDTH ? ViewUtils.getScreenWidth(mApplicationContext)
+                    : ViewUtils.getScreenHeight(mApplicationContext)) * ratio);
             return this;
         }
 
@@ -243,7 +243,7 @@ public class FloatWindow {
                 throw new IllegalArgumentException("View has not been set!");
             }
             if (mView == null) {
-                mView = Util.inflate(mApplicationContext, mLayoutId);
+                mView = ViewUtils.inflate(mApplicationContext, mLayoutId);
             }
             BaseFloatWindow floatWindowImpl = new IFloatWindowImpl(this);
             mFloatWindowMap.put(mTag, floatWindowImpl);

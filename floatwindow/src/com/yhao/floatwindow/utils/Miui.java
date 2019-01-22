@@ -19,9 +19,7 @@ import java.util.List;
 
 /**
  * @Copyright © 2017 Analysys Inc. All rights reserved.
- * @Description:
- * 
- *               <pre>
+ * @Description:               <pre>
  *   需要清楚：一个MIUI版本对应小米各种机型，基于不同的安卓版本，但是权限设置页跟MIUI版本有关
  *   测试TYPE_TOAST类型：
  *   7.0：
@@ -40,7 +38,6 @@ import java.util.List;
  *  * 跟Android版本无关，跟MIUI版本无关，addView方法也不报错
  *  * 所以最后对小米6.0以上的适配方法是：不使用 TYPE_TOAST 类型，统一申请权限
  *               </pre>
- * 
  * @Version: 1.0.9
  * @Create: 2017/12/30 17:11:30
  * @Author: yhao
@@ -68,7 +65,7 @@ public class Miui {
     /**
      * Android6.0以下申请权限
      */
-    public static void req(final Context context, PermissionListener permissionListener) {
+    public static void requestPermission(final Context context, PermissionListener permissionListener) {
         if (PermissionUtil.hasPermission(context)) {
             permissionListener.onSuccess();
             return;
@@ -92,12 +89,12 @@ public class Miui {
                     mPermissionListenerList.clear();
                 }
             };
-            req(context);
+            requestPermission(context);
         }
         mPermissionListenerList.add(permissionListener);
     }
 
-    private static void req(final Context context) {
+    private static void requestPermission(final Context context) {
         String prop = getProp();
         if (MIUI5.equals(prop)) {
             reqForMiui5(context);
