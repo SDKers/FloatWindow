@@ -24,7 +24,6 @@ release
 build
 *bin/
 *gen/
-*.classpath
 
 #for eclipse
 .settings/
