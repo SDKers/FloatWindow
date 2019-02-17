@@ -1,7 +1,13 @@
-# FloatWindowUpdate
+#  FloatWindowUpdate
 
-特性：
-======
+> 近期工作要点:
+> 1. 权限判断和验证部分,兼容更多的平台和设备
+> 2. 权限、悬浮窗、管理三部分解耦
+> 如有想加入维护的可以私聊
+
+
+## 特性：
+------
 
  1. 支持拖动，提供自动贴边等动画
 
@@ -17,22 +23,33 @@
 
  7. 链式调用，简洁清爽
 
-开发工具集成指南:
-======
 
-* `Android studio`集成，直接使用编译成的aar包即可。
+## 开发工具集成指南:
+------
 
-* `eclipse`集成相对麻烦些.
+### 1. 编译
+
+根据平台执行编译指令即可
+
+    * Windows: gradlew.bat build
+    * Linux/Mac: gradlew build
+
+### 2. 使用
+
+* `Android studio`集成，直接使用编译成的aar包即可.AAR包路径 `floatwindow/build/outputs/aar/`
+
+* `eclipse`集成相对麻烦些: 将AAR解压开，将`classes.jar`修改名字拷贝到项目`libs`中;并在权限配置中集成权限和申请权限的页面即可
 
 ``` xml
 <manifest>
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <....../>
      <application>
+         <....../>
          <activity
              android:name="com.yhao.floatwindow.FloatActivity"
              android:configChanges="keyboardHidden|orientation|screenSize"
              android:launchMode="standard"
-             android:theme="@style/permission_PermissionActivity"
              android:windowSoftInputMode="stateHidden|stateAlwaysHidden" />
      
      </application>
@@ -41,12 +58,13 @@
 
 
 
-代码集成：
+##  具体使用方法
 ======
 
 
 **0.声明权限**
 
+> 非必要，如果想兼容更多使用场景，建议集成.
 
 ``` xml
 <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />

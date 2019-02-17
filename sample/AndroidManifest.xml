@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.fixedfloatwindow">
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.example.fixedfloatwindow"
+    android:versionCode="1"
+    android:versionName="1.0" >
 
     <uses-sdk
         android:minSdkVersion="14"
-        android:targetSdkVersion="22" />
+        android:targetSdkVersion="22"
+        tools:ignore="OldTargetApi" />
+
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
     <application
@@ -12,8 +17,8 @@
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme">
-        <activity android:name="com.example.fixedfloatwindow.MainActivity">
+        android:theme="@android:style/Theme.DeviceDefault.Light" >
+        <activity android:name="com.example.fixedfloatwindow.MainActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -23,12 +28,10 @@
         <activity android:name="com.example.fixedfloatwindow.ActivityB" />
         <activity android:name="com.example.fixedfloatwindow.ActivityC" />
         <activity android:name="com.example.fixedfloatwindow.BaseActivity" />
-
         <activity
             android:name="com.yhao.floatwindow.FloatActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:launchMode="standard"
-            android:theme="@style/permission_PermissionActivity"
             android:windowSoftInputMode="stateHidden|stateAlwaysHidden" />
     </application>
 

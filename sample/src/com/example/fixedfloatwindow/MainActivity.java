@@ -1,22 +1,18 @@
 package com.example.fixedfloatwindow;
 
-import android.app.Activity;
-import android.content.Intent;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.animation.BounceInterpolator;
-import android.widget.ImageView;
-import android.widget.Toast;
-
 import com.yhao.floatwindow.FloatWindow;
 import com.yhao.floatwindow.annotation.MoveType;
 import com.yhao.floatwindow.annotation.Screen;
 import com.yhao.floatwindow.interfaces.BaseFloatWindow;
+import com.yhao.floatwindow.utils.LogUtil;
 
-import java.lang.reflect.Method;
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.view.animation.BounceInterpolator;
+import android.widget.ImageView;
+import android.widget.Toast;
 
 public class MainActivity extends Activity {
 
@@ -48,18 +44,21 @@ public class MainActivity extends Activity {
         mImageView2.setImageResource(R.drawable.c_outline_settings_black_48dp);
         switch (view.getId()) {
             case R.id.btnOpenActivityB:
+                // 打开 B 界面
                 startActivity(new Intent(this, ActivityB.class));
                 break;
             case R.id.btnReqPermission:
+                // 申请权限且不构建. 完善中
                 // FloatWindow.prepare(this);
                 break;
             case R.id.btnOnlyBuild:
+                // 构建不加载
                 // if (mBuilderA != null) {
                 // mBuilderA.build();
                 // }
                 break;
             case R.id.btnInitAndShowA:
-
+                // 初始化展示
                 mFirstWindow = FloatWindow.get("mFirstWindow");
                 // 效果图1
                 if (mFirstWindow != null) {
@@ -71,6 +70,7 @@ public class MainActivity extends Activity {
                 break;
 
             case R.id.btnHideA:
+                // 隐藏悬浮窗
                 mFirstWindow = FloatWindow.get("mFirstWindow");
                 if (mFirstWindow != null) {
                     mFirstWindow.hide();
@@ -79,10 +79,11 @@ public class MainActivity extends Activity {
                 }
                 break;
             case R.id.btnDissmissA:
+                // 销毁悬浮窗
                 FloatWindow.destroy("mFirstWindow");
                 break;
             case R.id.btnIsVisable1:
-
+                // 判断是否可见
                 // BaseFloatWindow f = FloatWindow.get("mFirstWindow");
                 // if (f != null) {
                 // boolean isv = f.isViewVisible();
@@ -98,34 +99,7 @@ public class MainActivity extends Activity {
 
     private void alert(String status) {
         Toast.makeText(this, status, Toast.LENGTH_LONG).show();
-        Log.i("sanbo", status);
+        LogUtil.i(status);
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        setIconEnable(menu, true);
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    private void setIconEnable(Menu menu, boolean enable) {
-        try {
-            Class<?> clazz = Class.forName("com.android.internal.view.menu.MenuBuilder");
-            Method m = clazz.getDeclaredMethod("setOptionalIconsVisible", boolean.class);
-            m.setAccessible(true);
-            // 下面传入参数
-            m.invoke(menu, enable);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 }
