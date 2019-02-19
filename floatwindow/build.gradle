@@ -1,5 +1,6 @@
 apply plugin: 'com.android.library'
 
+def version="v1.0.9.1";
 android {
     compileSdkVersion 23
     buildToolsVersion "23.0.3"
@@ -49,5 +50,26 @@ tasks.withType(Javadoc) {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile files('libs/android-support-v4.jar')
 }
+
+
+/** ****************************************************************/
+/**************************** 编译 ****************************/
+/** ****************************************************************/
+
+//task releaseJar(type: Copy,dependsOn: [copyWithApp, copyWithOutApp]) {
+task releaseJar(type: Copy) {
+    from("build/intermediates/bundles/release")
+    into "../release"
+    include("classes.jar")
+    rename("classes.jar", "floatwindow_" + version + ".jar")
+}
+
+task release(type:Copy,dependsOn: [releaseJar]){
+ from("build/outputs/aar")
+    into "../release"
+    include("floatwindow-release.aar")
+    rename("floatwindow-release.aar", "floatwindow_" + version + ".aar")
+}
+
+release.dependsOn build

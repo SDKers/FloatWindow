@@ -24,11 +24,11 @@ public abstract class BaseFloatWindow {
 
     public abstract void updateX(int x);
 
-    public abstract void updateX(@Screen.screenType int screenType, float ratio);
+    public abstract void updateX(Screen screenType, float ratio);
 
     public abstract void updateY(int y);
 
-    public abstract void updateY(@Screen.screenType int screenType, float ratio);
+    public abstract void updateY(Screen screenType, float ratio);
 
     public abstract View getView();
 

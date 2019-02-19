@@ -28,7 +28,7 @@ import java.util.Map;
  */
 public class FloatWindow {
 
-    private static final String VERSION = "v1.0.9";
+    private static final String VERSION = "v1.0.9.1";
     private static final String DEFAULT_TAG = "default_float_window_tag";
     private static Map<String, BaseFloatWindow> mFloatWindowMap;
     @SuppressWarnings("unused")
@@ -74,6 +74,7 @@ public class FloatWindow {
     /**
      * 销毁全部
      */
+    @SuppressWarnings("unlikely-arg-type")
     public static void destroyAll() {
         if (mFloatWindowMap != null) {
             for (BaseFloatWindow iFloatWindow : mFloatWindowMap.values()) {
@@ -102,7 +103,7 @@ public class FloatWindow {
         public int yOffset;
         public boolean mShow = true;
         public Class<?>[] mActivities;
-        public int mMoveType = MoveType.SLIDE;
+        public MoveType mMoveType = MoveType.SLIDE;
         public int mSlideLeftMargin;
         public int mSlideRightMargin;
         public long mDuration = 300;
@@ -114,8 +115,7 @@ public class FloatWindow {
         private String mTag = DEFAULT_TAG;
 
         @SuppressWarnings("unused")
-        private Builder() {
-        }
+        private Builder() {}
 
         Builder(Context applicationContext) {
             mApplicationContext = applicationContext;
@@ -141,15 +141,15 @@ public class FloatWindow {
             return this;
         }
 
-        public Builder setWidth(@Screen.screenType int screenType, float ratio) {
-            mWidth = (int) ((screenType == Screen.WIDTH ? ViewUtils.getScreenWidth(mApplicationContext)
-                    : ViewUtils.getScreenHeight(mApplicationContext)) * ratio);
+        public Builder setWidth(Screen screenType, float ratio) {
+            mWidth = (int)((screenType == Screen.WIDTH ? ViewUtils.getScreenWidth(mApplicationContext)
+                : ViewUtils.getScreenHeight(mApplicationContext)) * ratio);
             return this;
         }
 
-        public Builder setHeight(@Screen.screenType int screenType, float ratio) {
-            mHeight = (int) ((screenType == Screen.WIDTH ? ViewUtils.getScreenWidth(mApplicationContext)
-                    : ViewUtils.getScreenHeight(mApplicationContext)) * ratio);
+        public Builder setHeight(Screen screenType, float ratio) {
+            mHeight = (int)((screenType == Screen.WIDTH ? ViewUtils.getScreenWidth(mApplicationContext)
+                : ViewUtils.getScreenHeight(mApplicationContext)) * ratio);
             return this;
         }
 
@@ -163,22 +163,22 @@ public class FloatWindow {
             return this;
         }
 
-        public Builder setX(@Screen.screenType int screenType, float ratio) {
-            xOffset = (int) ((screenType == Screen.WIDTH ? ViewUtils.getScreenWidth(mApplicationContext)
-                    : ViewUtils.getScreenHeight(mApplicationContext)) * ratio);
+        public Builder setX(Screen screenType, float ratio) {
+            xOffset = (int)((screenType == Screen.WIDTH ? ViewUtils.getScreenWidth(mApplicationContext)
+                : ViewUtils.getScreenHeight(mApplicationContext)) * ratio);
             return this;
         }
 
-        public Builder setY(@Screen.screenType int screenType, float ratio) {
-            yOffset = (int) ((screenType == Screen.WIDTH ? ViewUtils.getScreenWidth(mApplicationContext)
-                    : ViewUtils.getScreenHeight(mApplicationContext)) * ratio);
+        public Builder setY(Screen screenType, float ratio) {
+            yOffset = (int)((screenType == Screen.WIDTH ? ViewUtils.getScreenWidth(mApplicationContext)
+                : ViewUtils.getScreenHeight(mApplicationContext)) * ratio);
             return this;
         }
 
         /**
          * 设置 Activity 过滤器，用于指定在哪些界面显示悬浮窗，默认全部界面都显示
          *
-         * @param show       过滤类型,子类类型也会生效
+         * @param show 过滤类型,子类类型也会生效
          * @param activities 过滤界面
          */
         public Builder setFilter(boolean show, Class<?>... activities) {
@@ -187,18 +187,18 @@ public class FloatWindow {
             return this;
         }
 
-        public Builder setMoveType(@MoveType.MOVE_TYPE int moveType) {
+        public Builder setMoveType(MoveType moveType) {
             return setMoveType(moveType, 0, 0);
         }
 
         /**
          * 设置带边距的贴边动画，只有 moveType 为 MoveType.SLIDE，设置边距才有意义，这个方法不标准，后面调整
          *
-         * @param moveType         贴边动画 MoveType.SLIDE
-         * @param slideLeftMargin  贴边动画左边距，默认为 0
+         * @param moveType 贴边动画 MoveType.SLIDE
+         * @param slideLeftMargin 贴边动画左边距，默认为 0
          * @param slideRightMargin 贴边动画右边距，默认为 0
          */
-        public Builder setMoveType(@MoveType.MOVE_TYPE int moveType, int slideLeftMargin, int slideRightMargin) {
+        public Builder setMoveType(MoveType moveType, int slideLeftMargin, int slideRightMargin) {
             mMoveType = moveType;
             mSlideLeftMargin = slideLeftMargin;
             mSlideRightMargin = slideRightMargin;
@@ -237,7 +237,7 @@ public class FloatWindow {
             }
             if (mFloatWindowMap.containsKey(mTag)) {
                 throw new IllegalArgumentException(
-                        "FloatWindow of this tag has been added, Please set a new tag for the new FloatWindow");
+                    "FloatWindow of this tag has been added, Please set a new tag for the new FloatWindow");
             }
             if (mView == null && mLayoutId == 0) {
                 throw new IllegalArgumentException("View has not been set!");

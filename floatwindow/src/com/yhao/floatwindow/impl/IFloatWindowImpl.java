@@ -45,8 +45,7 @@ public class IFloatWindowImpl extends BaseFloatWindow {
     private int mSlop;
 
     @SuppressWarnings("unused")
-    private IFloatWindowImpl() {
-    }
+    private IFloatWindowImpl() {}
 
     public IFloatWindowImpl(FloatWindow.Builder b) {
         mBuilder = b;
@@ -63,30 +62,30 @@ public class IFloatWindowImpl extends BaseFloatWindow {
         mFloatView.setSize(mBuilder.mWidth, mBuilder.mHeight);
         mFloatView.setGravity(mBuilder.gravity, mBuilder.xOffset, mBuilder.yOffset);
         mFloatView.setView(mBuilder.mView);
-        mFloatLifecycle = new FloatLifecycleReceiver(mBuilder.mApplicationContext, mBuilder.mShow,
-                mBuilder.mActivities, new LifecycleListener() {
-            //        new FloatLifecycleReceiver(mBuilder.mApplicationContext, mBuilder.mShow, mBuilder.mActivities,
-//                new LifecycleListener() {
-            @Override
-            public void onShow() {
-                show();
-            }
+        mFloatLifecycle = new FloatLifecycleReceiver(mBuilder.mApplicationContext, mBuilder.mShow, mBuilder.mActivities,
+            new LifecycleListener() {
+                // new FloatLifecycleReceiver(mBuilder.mApplicationContext, mBuilder.mShow, mBuilder.mActivities,
+                // new LifecycleListener() {
+                @Override
+                public void onShow() {
+                    show();
+                }
 
-            @Override
-            public void onHide() {
-                hide();
-            }
-
-            @Override
-            public void onBackToDesktop() {
-                if (!mBuilder.mDesktopShow) {
+                @Override
+                public void onHide() {
                     hide();
                 }
-                if (mBuilder.mViewStateListener != null) {
-                    mBuilder.mViewStateListener.onBackToDesktop();
+
+                @Override
+                public void onBackToDesktop() {
+                    if (!mBuilder.mDesktopShow) {
+                        hide();
+                    }
+                    if (mBuilder.mViewStateListener != null) {
+                        mBuilder.mViewStateListener.onBackToDesktop();
+                    }
                 }
-            }
-        });
+            });
     }
 
     @Override
@@ -159,19 +158,19 @@ public class IFloatWindowImpl extends BaseFloatWindow {
     }
 
     @Override
-    public void updateX(int screenType, float ratio) {
+    public void updateX(Screen screenType, float ratio) {
         checkMoveType();
-        mBuilder.xOffset = (int) ((screenType == Screen.WIDTH ? ViewUtils.getScreenWidth(mBuilder.mApplicationContext)
-                : ViewUtils.getScreenHeight(mBuilder.mApplicationContext)) * ratio);
+        mBuilder.xOffset = (int)((screenType == Screen.WIDTH ? ViewUtils.getScreenWidth(mBuilder.mApplicationContext)
+            : ViewUtils.getScreenHeight(mBuilder.mApplicationContext)) * ratio);
         mFloatView.updateX(mBuilder.xOffset);
 
     }
 
     @Override
-    public void updateY(int screenType, float ratio) {
+    public void updateY(Screen screenType, float ratio) {
         checkMoveType();
-        mBuilder.yOffset = (int) ((screenType == Screen.WIDTH ? ViewUtils.getScreenWidth(mBuilder.mApplicationContext)
-                : ViewUtils.getScreenHeight(mBuilder.mApplicationContext)) * ratio);
+        mBuilder.yOffset = (int)((screenType == Screen.WIDTH ? ViewUtils.getScreenWidth(mBuilder.mApplicationContext)
+            : ViewUtils.getScreenHeight(mBuilder.mApplicationContext)) * ratio);
         mFloatView.updateY(mBuilder.yOffset);
 
     }
@@ -199,106 +198,99 @@ public class IFloatWindowImpl extends BaseFloatWindow {
     }
 
     private void initTouchEvent() {
-        switch (mBuilder.mMoveType) {
-            case MoveType.INACTIVE:
-                break;
-            default:
-                getView().setOnTouchListener(new View.OnTouchListener() {
-                    float lastX, lastY, changeX, changeY;
-                    int newX, newY;
 
-                    @SuppressLint("ClickableViewAccessibility")
-                    @Override
-                    public boolean onTouch(View v, MotionEvent event) {
+        if (mBuilder.mMoveType != MoveType.INACTIVE) {
+            getView().setOnTouchListener(new View.OnTouchListener() {
+                float lastX, lastY, changeX, changeY;
+                int newX, newY;
 
-                        switch (event.getAction()) {
-                            case MotionEvent.ACTION_DOWN:
-                                downX = event.getRawX();
-                                downY = event.getRawY();
+                @SuppressLint("ClickableViewAccessibility")
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+
+                    switch (event.getAction()) {
+                        case MotionEvent.ACTION_DOWN:
+                            downX = event.getRawX();
+                            downY = event.getRawY();
+                            lastX = event.getRawX();
+                            lastY = event.getRawY();
+                            cancelAnimator();
+                            break;
+                        // case MotionEvent.ACTION_MOVE:
+                        // changeX = event.getRawX() - lastX;
+                        // changeY = event.getRawY() - lastY;
+                        // newX = (int)(mFloatView.getX() + changeX);
+                        // newY = (int)(mFloatView.getY() + changeY);
+                        // mFloatView.updateXY(newX, newY);
+                        // if (mBuilder.mViewStateListener != null) {
+                        // mBuilder.mViewStateListener.onPositionUpdate(newX, newY);
+                        // }
+                        // lastX = event.getRawX();
+                        // lastY = event.getRawY();
+                        // break;
+                        case MotionEvent.ACTION_MOVE:
+                            if (!isOutOfRange(event.getRawX(), event.getRawY())) {
+                                changeX = event.getRawX() - lastX;
+                                changeY = event.getRawY() - lastY;
+                                newX = (int)(mFloatView.getX() + changeX);
+                                newY = (int)(mFloatView.getY() + changeY);
+                                mFloatView.updateXY(newX, newY);
+                                if (mBuilder.mViewStateListener != null) {
+                                    mBuilder.mViewStateListener.onPositionUpdate(newX, newY);
+                                }
                                 lastX = event.getRawX();
                                 lastY = event.getRawY();
-                                cancelAnimator();
-                                break;
-//                            case MotionEvent.ACTION_MOVE:
-//                                changeX = event.getRawX() - lastX;
-//                                changeY = event.getRawY() - lastY;
-//                                newX = (int)(mFloatView.getX() + changeX);
-//                                newY = (int)(mFloatView.getY() + changeY);
-//                                mFloatView.updateXY(newX, newY);
-//                                if (mBuilder.mViewStateListener != null) {
-//                                    mBuilder.mViewStateListener.onPositionUpdate(newX, newY);
-//                                }
-//                                lastX = event.getRawX();
-//                                lastY = event.getRawY();
-//                                break;
-                            case MotionEvent.ACTION_MOVE:
-                                if (!isOutOfRange(event.getRawX(), event.getRawY())) {
-                                    changeX = event.getRawX() - lastX;
-                                    changeY = event.getRawY() - lastY;
-                                    newX = (int) (mFloatView.getX() + changeX);
-                                    newY = (int) (mFloatView.getY() + changeY);
-                                    mFloatView.updateXY(newX, newY);
-                                    if (mBuilder.mViewStateListener != null) {
-                                        mBuilder.mViewStateListener.onPositionUpdate(newX, newY);
+                            }
+                            break;
+                        case MotionEvent.ACTION_UP:
+                            upX = event.getRawX();
+                            upY = event.getRawY();
+                            mClick = (Math.abs(upX - downX) > mSlop) || (Math.abs(upY - downY) > mSlop);
+                            if (mBuilder.mMoveType == MoveType.SLIDE) {
+                                int startX = mFloatView.getX();
+                                int endX =
+                                    (startX * 2 + v.getWidth() > ViewUtils.getScreenWidth(mBuilder.mApplicationContext))
+                                        ? ViewUtils.getScreenWidth(mBuilder.mApplicationContext) - v.getWidth()
+                                            - mBuilder.mSlideRightMargin
+                                        : mBuilder.mSlideLeftMargin;
+                                mAnimator = ObjectAnimator.ofInt(startX, endX);
+                                mAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                                    @Override
+                                    public void onAnimationUpdate(ValueAnimator animation) {
+                                        int x = (Integer)animation.getAnimatedValue();
+                                        mFloatView.updateX(x);
+                                        if (mBuilder.mViewStateListener != null) {
+                                            mBuilder.mViewStateListener.onPositionUpdate(x, (int)upY);
+                                        }
                                     }
-                                    lastX = event.getRawX();
-                                    lastY = event.getRawY();
-                                }
-                                break;
-                            case MotionEvent.ACTION_UP:
-                                upX = event.getRawX();
-                                upY = event.getRawY();
-                                mClick = (Math.abs(upX - downX) > mSlop) || (Math.abs(upY - downY) > mSlop);
-                                switch (mBuilder.mMoveType) {
-                                    case MoveType.SLIDE:
-                                        int startX = mFloatView.getX();
-                                        int endX = (startX * 2 + v.getWidth() > ViewUtils
-                                                .getScreenWidth(mBuilder.mApplicationContext))
-                                                ? ViewUtils.getScreenWidth(mBuilder.mApplicationContext) - v.getWidth()
-                                                - mBuilder.mSlideRightMargin
-                                                : mBuilder.mSlideLeftMargin;
-                                        mAnimator = ObjectAnimator.ofInt(startX, endX);
-                                        mAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                                            @Override
-                                            public void onAnimationUpdate(ValueAnimator animation) {
-                                                int x = (Integer) animation.getAnimatedValue();
-                                                mFloatView.updateX(x);
-                                                if (mBuilder.mViewStateListener != null) {
-                                                    mBuilder.mViewStateListener.onPositionUpdate(x, (int) upY);
-                                                }
-                                            }
-                                        });
-                                        startAnimator();
-                                        break;
-                                    case MoveType.BACK:
-                                        PropertyValuesHolder pvhX =
-                                                PropertyValuesHolder.ofInt("x", mFloatView.getX(), mBuilder.xOffset);
-                                        PropertyValuesHolder pvhY =
-                                                PropertyValuesHolder.ofInt("y", mFloatView.getY(), mBuilder.yOffset);
-                                        mAnimator = ObjectAnimator.ofPropertyValuesHolder(pvhX, pvhY);
-                                        mAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                                            @Override
-                                            public void onAnimationUpdate(ValueAnimator animation) {
-                                                int x = (Integer) animation.getAnimatedValue("x");
-                                                int y = (Integer) animation.getAnimatedValue("y");
-                                                mFloatView.updateXY(x, y);
-                                                if (mBuilder.mViewStateListener != null) {
-                                                    mBuilder.mViewStateListener.onPositionUpdate(x, y);
-                                                }
-                                            }
-                                        });
-                                        startAnimator();
-                                        break;
-                                    default:
-                                        break;
-                                }
-                                break;
-                            default:
-                                break;
-                        }
-                        return mClick;
+                                });
+                                startAnimator();
+                            } else if (mBuilder.mMoveType == MoveType.SLIDE) {
+                                PropertyValuesHolder pvhX =
+                                    PropertyValuesHolder.ofInt("x", mFloatView.getX(), mBuilder.xOffset);
+                                PropertyValuesHolder pvhY =
+                                    PropertyValuesHolder.ofInt("y", mFloatView.getY(), mBuilder.yOffset);
+                                mAnimator = ObjectAnimator.ofPropertyValuesHolder(pvhX, pvhY);
+                                mAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                                    @Override
+                                    public void onAnimationUpdate(ValueAnimator animation) {
+                                        int x = (Integer)animation.getAnimatedValue("x");
+                                        int y = (Integer)animation.getAnimatedValue("y");
+                                        mFloatView.updateXY(x, y);
+                                        if (mBuilder.mViewStateListener != null) {
+                                            mBuilder.mViewStateListener.onPositionUpdate(x, y);
+                                        }
+                                    }
+                                });
+                                startAnimator();
+                            }
+                            break;
+                        default:
+                            break;
                     }
-                });
+                    return mClick;
+                }
+            });
         }
     }
 
@@ -354,6 +346,5 @@ public class IFloatWindowImpl extends BaseFloatWindow {
             mBuilder.mViewStateListener.onMoveAnimStart();
         }
     }
-
 
 }
