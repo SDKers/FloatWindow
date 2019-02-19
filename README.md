@@ -31,8 +31,12 @@
 
 根据平台执行编译指令即可
 
-    * Windows: gradlew.bat build
-    * Linux/Mac: gradlew build
+    * Windows: gradlew.bat release
+    * Linux/Mac: gradlew release
+
+推荐使用shell编译(linux/mac终端,window建议cmder):
+   `sh build.sh`
+   输出在跟目录下的release目录中
 
 ### 2. 使用
 
