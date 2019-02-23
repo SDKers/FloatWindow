@@ -265,7 +265,7 @@ public class IFloatWindowImpl extends BaseFloatWindow {
                                     }
                                 });
                                 startAnimator();
-                            } else if (mBuilder.mMoveType == MoveType.SLIDE) {
+                            } else if (mBuilder.mMoveType == MoveType.BACK) {
                                 PropertyValuesHolder pvhX =
                                     PropertyValuesHolder.ofInt("x", mFloatView.getX(), mBuilder.xOffset);
                                 PropertyValuesHolder pvhY =
