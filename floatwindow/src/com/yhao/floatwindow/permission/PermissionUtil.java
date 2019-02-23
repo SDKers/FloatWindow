@@ -10,7 +10,7 @@ import android.provider.Settings;
 import android.view.View;
 import android.view.WindowManager;
 
-import com.yhao.floatwindow.utils.LogUtil;
+import com.yhao.floatwindow.utils.L;
 
 import java.lang.reflect.Method;
 
@@ -80,7 +80,7 @@ public class PermissionUtil {
             mgr.removeView(viewToAdd);
             return true;
         } catch (Exception e) {
-            LogUtil.e("hasPermissionForO e:" + e.toString());
+            L.e("hasPermissionForO e:" + e.toString());
         }
         return false;
     }

@@ -9,7 +9,7 @@ import android.view.WindowManager;
 import com.yhao.floatwindow.FloatActivity;
 import com.yhao.floatwindow.interfaces.BaseFloatView;
 import com.yhao.floatwindow.permission.PermissionListener;
-import com.yhao.floatwindow.utils.LogUtil;
+import com.yhao.floatwindow.utils.L;
 import com.yhao.floatwindow.utils.Miui;
 
 /**
@@ -90,7 +90,7 @@ public class FloatPhone extends BaseFloatView {
                 mWindowManager.addView(mView, mLayoutParams);
             } catch (Exception e) {
                 mWindowManager.removeView(mView);
-                LogUtil.e("TYPE_TOAST 失败");
+                L.e("TYPE_TOAST 失败");
                 req();
             }
         }

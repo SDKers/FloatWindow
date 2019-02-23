@@ -54,7 +54,7 @@ public class Miui {
     private static PermissionListener mPermissionListener;
 
     public static boolean rom() {
-        LogUtil.d(" Miui  : " + Miui.getProp());
+        L.d(" Miui  : " + Miui.getProp());
         return "Xiaomi".equals(Build.MANUFACTURER);
     }
 
@@ -124,7 +124,7 @@ public class Miui {
         if (Rom.isIntentAvailable(intent, context)) {
             context.startActivity(intent);
         } else {
-            LogUtil.e("intent is not available!");
+            L.e("intent is not available!");
         }
     }
 
@@ -136,7 +136,7 @@ public class Miui {
         if (Rom.isIntentAvailable(intent, context)) {
             context.startActivity(intent);
         } else {
-            LogUtil.e("intent is not available!");
+            L.e("intent is not available!");
         }
     }
 
@@ -155,7 +155,7 @@ public class Miui {
             if (Rom.isIntentAvailable(intent, context)) {
                 context.startActivity(intent);
             } else {
-                LogUtil.e("intent is not available!");
+                L.e("intent is not available!");
             }
         }
     }

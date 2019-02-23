@@ -13,7 +13,7 @@ import com.yhao.floatwindow.impl.IFloatWindowImpl;
 import com.yhao.floatwindow.interfaces.BaseFloatWindow;
 import com.yhao.floatwindow.interfaces.ViewStateListener;
 import com.yhao.floatwindow.permission.PermissionListener;
-import com.yhao.floatwindow.utils.LogUtil;
+import com.yhao.floatwindow.utils.L;
 import com.yhao.floatwindow.utils.ViewUtils;
 
 import java.util.HashMap;
@@ -83,7 +83,7 @@ public class FloatWindow {
                     iFloatWindow.destory();
                     mFloatWindowMap.remove(iFloatWindow);
                 } catch (Throwable e) {
-                    LogUtil.e(Log.getStackTraceString(e));
+                    L.e(Log.getStackTraceString(e));
                 }
             }
             mFloatWindowMap = null;
@@ -247,7 +247,7 @@ public class FloatWindow {
             }
             BaseFloatWindow floatWindowImpl = new IFloatWindowImpl(this);
             mFloatWindowMap.put(mTag, floatWindowImpl);
-            LogUtil.i("build [" + mTag + "] success. sdk version:" + VERSION);
+            L.i("build [" + mTag + "] success. sdk version:" + VERSION);
         }
     }
 }
