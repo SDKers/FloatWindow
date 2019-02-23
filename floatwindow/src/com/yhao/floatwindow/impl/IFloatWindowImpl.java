@@ -1,5 +1,13 @@
 package com.yhao.floatwindow.impl;
 
+import com.yhao.floatwindow.FloatWindow;
+import com.yhao.floatwindow.annotation.MoveType;
+import com.yhao.floatwindow.annotation.Screen;
+import com.yhao.floatwindow.interfaces.BaseFloatView;
+import com.yhao.floatwindow.interfaces.BaseFloatWindow;
+import com.yhao.floatwindow.interfaces.LifecycleListener;
+import com.yhao.floatwindow.utils.ViewUtils;
+
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
@@ -12,14 +20,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.animation.DecelerateInterpolator;
-
-import com.yhao.floatwindow.FloatWindow;
-import com.yhao.floatwindow.annotation.MoveType;
-import com.yhao.floatwindow.annotation.Screen;
-import com.yhao.floatwindow.interfaces.BaseFloatView;
-import com.yhao.floatwindow.interfaces.BaseFloatWindow;
-import com.yhao.floatwindow.interfaces.LifecycleListener;
-import com.yhao.floatwindow.utils.ViewUtils;
 
 /**
  * @Copyright © 2017 Analysys Inc. All rights reserved.
@@ -68,12 +68,12 @@ public class IFloatWindowImpl extends BaseFloatWindow {
                 // new LifecycleListener() {
                 @Override
                 public void onShow() {
-                    show();
+                    // show();
                 }
 
                 @Override
                 public void onHide() {
-                    hide();
+                    // hide();
                 }
 
                 @Override
