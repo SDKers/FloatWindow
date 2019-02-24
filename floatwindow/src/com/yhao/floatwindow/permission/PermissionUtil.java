@@ -32,7 +32,7 @@ public class PermissionUtil {
     }
 
     public static boolean hasPermissionOnActivityResult(Context context) {
-        if (Build.VERSION.SDK_INT == 26) {
+        if (Build.VERSION.SDK_INT >= 26) {
             return hasPermissionForO(context);
         }
         if (Build.VERSION.SDK_INT >= 23) {
