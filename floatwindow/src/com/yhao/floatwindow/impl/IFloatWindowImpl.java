@@ -28,6 +28,7 @@ import android.view.animation.DecelerateInterpolator;
  * @Version: 1.0.9
  * @Create: 2017/12/29 17:15:35
  * @Author: yhao
+ * @Modify: sanbo
  */
 public class IFloatWindowImpl extends BaseFloatWindow {
 
@@ -170,7 +171,6 @@ public class IFloatWindowImpl extends BaseFloatWindow {
 
         // mBuilder.xOffset = (int)((screenType == Screen.WIDTH ? ViewUtils.getScreenWidth(mBuilder.mApplicationContext)
         // : ViewUtils.getScreenHeight(mBuilder.mApplicationContext)) * ratio);
-
         mBuilder.xOffset = (int)((screenType == Screen.WIDTH ? screenWidth : screenHeight) * ratio);
         mFloatView.updateX(mBuilder.xOffset);
 
@@ -304,7 +304,6 @@ public class IFloatWindowImpl extends BaseFloatWindow {
                                 }
                             });
                         }
-
                         startAnimator();
                     } else if (mBuilder.mMoveType == MoveType.BACK) {
                         PropertyValuesHolder pvhX =
@@ -325,6 +324,8 @@ public class IFloatWindowImpl extends BaseFloatWindow {
                         });
                         startAnimator();
                     }
+                    lastX = event.getRawX();
+                    lastY = event.getRawY();
                 }
 
                 /**
