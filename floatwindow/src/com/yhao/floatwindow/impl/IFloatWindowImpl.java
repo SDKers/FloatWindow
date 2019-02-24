@@ -6,6 +6,7 @@ import com.yhao.floatwindow.annotation.Screen;
 import com.yhao.floatwindow.interfaces.BaseFloatView;
 import com.yhao.floatwindow.interfaces.BaseFloatWindow;
 import com.yhao.floatwindow.interfaces.LifecycleListener;
+import com.yhao.floatwindow.utils.L;
 import com.yhao.floatwindow.utils.ViewUtils;
 
 import android.animation.Animator;
@@ -43,12 +44,18 @@ public class IFloatWindowImpl extends BaseFloatWindow {
     private float upY;
     private boolean mClick = false;
     private int mSlop;
+    private int screenWidth, screenHeight;
 
     @SuppressWarnings("unused")
     private IFloatWindowImpl() {}
 
     public IFloatWindowImpl(FloatWindow.Builder b) {
+        if (b == null) {
+            return;
+        }
         mBuilder = b;
+        checkScreenSize();
+
         if (mBuilder.mMoveType == MoveType.FIXED) {
             if (Build.VERSION.SDK_INT >= 25) {
                 mFloatView = new FloatPhone(b.mApplicationContext, mBuilder.mPermissionListener);
@@ -160,8 +167,11 @@ public class IFloatWindowImpl extends BaseFloatWindow {
     @Override
     public void updateX(Screen screenType, float ratio) {
         checkMoveType();
-        mBuilder.xOffset = (int)((screenType == Screen.WIDTH ? ViewUtils.getScreenWidth(mBuilder.mApplicationContext)
-            : ViewUtils.getScreenHeight(mBuilder.mApplicationContext)) * ratio);
+
+        // mBuilder.xOffset = (int)((screenType == Screen.WIDTH ? ViewUtils.getScreenWidth(mBuilder.mApplicationContext)
+        // : ViewUtils.getScreenHeight(mBuilder.mApplicationContext)) * ratio);
+
+        mBuilder.xOffset = (int)((screenType == Screen.WIDTH ? screenWidth : screenHeight) * ratio);
         mFloatView.updateX(mBuilder.xOffset);
 
     }
@@ -169,8 +179,9 @@ public class IFloatWindowImpl extends BaseFloatWindow {
     @Override
     public void updateY(Screen screenType, float ratio) {
         checkMoveType();
-        mBuilder.yOffset = (int)((screenType == Screen.WIDTH ? ViewUtils.getScreenWidth(mBuilder.mApplicationContext)
-            : ViewUtils.getScreenHeight(mBuilder.mApplicationContext)) * ratio);
+        // mBuilder.yOffset = (int)((screenType == Screen.WIDTH ? ViewUtils.getScreenWidth(mBuilder.mApplicationContext)
+        // : ViewUtils.getScreenHeight(mBuilder.mApplicationContext)) * ratio);
+        mBuilder.yOffset = (int)((screenType == Screen.WIDTH ? screenWidth : screenHeight) * ratio);
         mFloatView.updateY(mBuilder.yOffset);
 
     }
@@ -198,7 +209,7 @@ public class IFloatWindowImpl extends BaseFloatWindow {
     }
 
     private void initTouchEvent() {
-
+        checkScreenSize();
         if (mBuilder.mMoveType != MoveType.INACTIVE) {
             getView().setOnTouchListener(new View.OnTouchListener() {
                 float lastX, lastY, changeX, changeY;
@@ -208,89 +219,162 @@ public class IFloatWindowImpl extends BaseFloatWindow {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
 
-                    switch (event.getAction()) {
-                        case MotionEvent.ACTION_DOWN:
-                            downX = event.getRawX();
-                            downY = event.getRawY();
-                            lastX = event.getRawX();
-                            lastY = event.getRawY();
-                            cancelAnimator();
-                            break;
-                        // case MotionEvent.ACTION_MOVE:
-                        // changeX = event.getRawX() - lastX;
-                        // changeY = event.getRawY() - lastY;
-                        // newX = (int)(mFloatView.getX() + changeX);
-                        // newY = (int)(mFloatView.getY() + changeY);
-                        // mFloatView.updateXY(newX, newY);
-                        // if (mBuilder.mViewStateListener != null) {
-                        // mBuilder.mViewStateListener.onPositionUpdate(newX, newY);
-                        // }
-                        // lastX = event.getRawX();
-                        // lastY = event.getRawY();
-                        // break;
-                        case MotionEvent.ACTION_MOVE:
-                            if (!isOutOfRange(event.getRawX(), event.getRawY())) {
-                                changeX = event.getRawX() - lastX;
-                                changeY = event.getRawY() - lastY;
-                                newX = (int)(mFloatView.getX() + changeX);
-                                newY = (int)(mFloatView.getY() + changeY);
-                                mFloatView.updateXY(newX, newY);
-                                if (mBuilder.mViewStateListener != null) {
-                                    mBuilder.mViewStateListener.onPositionUpdate(newX, newY);
-                                }
-                                lastX = event.getRawX();
-                                lastY = event.getRawY();
-                            }
-                            break;
-                        case MotionEvent.ACTION_UP:
-                            upX = event.getRawX();
-                            upY = event.getRawY();
-                            mClick = (Math.abs(upX - downX) > mSlop) || (Math.abs(upY - downY) > mSlop);
-                            if (mBuilder.mMoveType == MoveType.SLIDE) {
-                                int startX = mFloatView.getX();
-                                int endX =
-                                    (startX * 2 + v.getWidth() > ViewUtils.getScreenWidth(mBuilder.mApplicationContext))
-                                        ? ViewUtils.getScreenWidth(mBuilder.mApplicationContext) - v.getWidth()
-                                            - mBuilder.mSlideRightMargin
-                                        : mBuilder.mSlideLeftMargin;
-                                mAnimator = ObjectAnimator.ofInt(startX, endX);
-                                mAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                                    @Override
-                                    public void onAnimationUpdate(ValueAnimator animation) {
-                                        int x = (Integer)animation.getAnimatedValue();
-                                        mFloatView.updateX(x);
-                                        if (mBuilder.mViewStateListener != null) {
-                                            mBuilder.mViewStateListener.onPositionUpdate(x, (int)upY);
-                                        }
-                                    }
-                                });
-                                startAnimator();
-                            } else if (mBuilder.mMoveType == MoveType.BACK) {
-                                PropertyValuesHolder pvhX =
-                                    PropertyValuesHolder.ofInt("x", mFloatView.getX(), mBuilder.xOffset);
-                                PropertyValuesHolder pvhY =
-                                    PropertyValuesHolder.ofInt("y", mFloatView.getY(), mBuilder.yOffset);
-                                mAnimator = ObjectAnimator.ofPropertyValuesHolder(pvhX, pvhY);
-                                mAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                                    @Override
-                                    public void onAnimationUpdate(ValueAnimator animation) {
-                                        int x = (Integer)animation.getAnimatedValue("x");
-                                        int y = (Integer)animation.getAnimatedValue("y");
-                                        mFloatView.updateXY(x, y);
-                                        if (mBuilder.mViewStateListener != null) {
-                                            mBuilder.mViewStateListener.onPositionUpdate(x, y);
-                                        }
-                                    }
-                                });
-                                startAnimator();
-                            }
-                            break;
-                        default:
-                            break;
+                    try {
+                        switch (event.getAction()) {
+                            case MotionEvent.ACTION_DOWN:
+                                onActionDown(event);
+                                break;
+                            case MotionEvent.ACTION_MOVE:
+                                onActionMove(event);
+                                break;
+                            case MotionEvent.ACTION_UP:
+                                onActionUp(event, v);
+                                break;
+                            default:
+                                break;
+                        }
+                    } catch (Throwable e) {
+                        L.e(e);
                     }
                     return mClick;
                 }
+
+                private void onActionDown(MotionEvent event) {
+                    downX = event.getRawX();
+                    downY = event.getRawY();
+                    lastX = event.getRawX();
+                    lastY = event.getRawY();
+                    cancelAnimator();
+                }
+
+                private void onActionMove(MotionEvent event) {
+                    // if (!isOutOfRange(event.getRawX(), event.getRawY())) {
+                    changeX = event.getRawX() - lastX;
+                    changeY = event.getRawY() - lastY;
+                    newX = (int)(mFloatView.getX() + changeX);
+                    newY = (int)(mFloatView.getY() + changeY);
+                    mFloatView.updateXY(newX, newY);
+                    if (mBuilder.mViewStateListener != null) {
+                        mBuilder.mViewStateListener.onPositionUpdate(newX, newY);
+                    }
+                    lastX = event.getRawX();
+                    lastY = event.getRawY();
+                    // }
+                }
+
+                private void onActionUp(MotionEvent event, View v) {
+                    upX = event.getRawX();
+                    upY = event.getRawY();
+                    mClick = (Math.abs(upX - downX) > mSlop) || (Math.abs(upY - downY) > mSlop);
+                    // L.i("Raw [%f x %f] -- FloatView[%d x %d] 分辨率(%d---%d) ", upX, upY, mFloatView.getX(),
+                    // mFloatView.getY(), screenWidth, screenHeight);
+                    if (mBuilder.mMoveType == MoveType.SLIDE) {
+                        int startX = mFloatView.getX();
+                        int startY = mFloatView.getY();
+                        // 如果图标滑动的坐标是在哪部分，根据坐标和边缘距离计算，相应的坐标
+                        int endX = (startX * 2 + v.getWidth() > screenWidth)
+                            ? screenWidth - v.getWidth() - mBuilder.mSlideRightMargin : mBuilder.mSlideLeftMargin;
+                        // 是否需要校正Y坐标
+                        if (isNeedMoveY(startY, upY)) {
+                            int endY = getY(startY, upY, v.getHeight());
+                            PropertyValuesHolder pvhX = PropertyValuesHolder.ofInt("x", mFloatView.getX(), endX);
+                            PropertyValuesHolder pvhY = PropertyValuesHolder.ofInt("y", mFloatView.getY(), endY);
+                            mAnimator = ObjectAnimator.ofPropertyValuesHolder(pvhX, pvhY);
+                            mAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                                @Override
+                                public void onAnimationUpdate(ValueAnimator animation) {
+                                    int x = (Integer)animation.getAnimatedValue("x");
+                                    int y = (Integer)animation.getAnimatedValue("y");
+                                    mFloatView.updateXY(x, y);
+                                    if (mBuilder.mViewStateListener != null) {
+                                        mBuilder.mViewStateListener.onPositionUpdate(x, y);
+                                    }
+                                }
+                            });
+                        } else {
+                            mAnimator = ObjectAnimator.ofInt(startX, endX);
+                            mAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                                @Override
+                                public void onAnimationUpdate(ValueAnimator animation) {
+                                    int x = (Integer)animation.getAnimatedValue();
+                                    mFloatView.updateX(x);
+                                    if (mBuilder.mViewStateListener != null) {
+                                        mBuilder.mViewStateListener.onPositionUpdate(x, (int)upY);
+                                    }
+                                }
+                            });
+                        }
+
+                        startAnimator();
+                    } else if (mBuilder.mMoveType == MoveType.BACK) {
+                        PropertyValuesHolder pvhX =
+                            PropertyValuesHolder.ofInt("x", mFloatView.getX(), mBuilder.xOffset);
+                        PropertyValuesHolder pvhY =
+                            PropertyValuesHolder.ofInt("y", mFloatView.getY(), mBuilder.yOffset);
+                        mAnimator = ObjectAnimator.ofPropertyValuesHolder(pvhX, pvhY);
+                        mAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                            @Override
+                            public void onAnimationUpdate(ValueAnimator animation) {
+                                int x = (Integer)animation.getAnimatedValue("x");
+                                int y = (Integer)animation.getAnimatedValue("y");
+                                mFloatView.updateXY(x, y);
+                                if (mBuilder.mViewStateListener != null) {
+                                    mBuilder.mViewStateListener.onPositionUpdate(x, y);
+                                }
+                            }
+                        });
+                        startAnimator();
+                    }
+                }
+
+                /**
+                 * 是否需要移动Y坐标
+                 * 
+                 * @param startY 悬浮窗获取的位置
+                 * @param upY 真实针对屏幕的位置
+                 * @return
+                 */
+                private boolean isNeedMoveY(int startY, float upY) {
+                    if (startY < 0 || upY > screenHeight) {
+                        return true;
+                    }
+                    return false;
+                }
+
+                /**
+                 * 获取Y的坐标
+                 * 
+                 * @param startY 悬浮窗获取的位置
+                 * @param upY 真实针对屏幕的位置
+                 * @param height 组建高度
+                 * @return
+                 */
+                private int getY(int startY, float upY, int height) {
+                    // 挨近顶部处理
+                    if (startY < 0) {
+                        // return (int)(upY + (0 - startY));
+                        // return height;
+                        return (int)Math.abs(startY - upY);
+                    }
+                    // 接近底部处理
+                    if (upY > screenHeight) {
+                        return (int)(screenHeight - height - (Math.abs(screenHeight - upY)));
+                    }
+                    return 0;
+                }
             });
+        }
+    }
+
+    /**
+     * 初始化屏幕分辨率
+     */
+    private void checkScreenSize() {
+        if (screenWidth == 0) {
+            screenWidth = ViewUtils.getScreenWidth(mBuilder.mApplicationContext);
+        }
+        if (screenHeight == 0) {
+            screenHeight = ViewUtils.getScreenHeight(mBuilder.mApplicationContext);
         }
     }
 
@@ -300,27 +384,28 @@ public class IFloatWindowImpl extends BaseFloatWindow {
         }
     }
 
-    /**
-     * 判断是否超出范围，根据自己需求设置比例大小，我自己设置的是0.025和0.975
-     *
-     * @param x event.getRawX()
-     * @param y event.getRawY()
-     * @return
-     */
-    private boolean isOutOfRange(float x, float y) {
-        boolean b = true;
-        float screenWidth = ViewUtils.getScreenWidth(mBuilder.mApplicationContext);
-        float screenHeight = ViewUtils.getScreenHeight(mBuilder.mApplicationContext);
-        float widthRate, heightRate;
-        widthRate = (screenWidth - x) / screenWidth;
-        heightRate = (screenHeight - y) / screenHeight;
-        if (widthRate > 0.025 && widthRate < 0.975 && heightRate > 0.025 && heightRate < 0.975) {
-            b = false;
-        } else {
-            b = true;
-        }
-        return b;
-    }
+    // /**
+    // * 判断是否超出范围，根据自己需求设置比例大小，我自己设置的是0.025和0.975
+    // * 这是合并一个哥们 没有完善。暂时不使用
+    // * https://github.com/yhaolpz/FloatWindow/pull/89/commits/f48b0ea10351246da43bf7e259855a91e1314dbc
+    // * @param x event.getRawX()
+    // * @param y event.getRawY()
+    // * @return
+    // */
+    // private boolean isOutOfRange(float x, float y) {
+    // boolean b = true;
+    // // float screenWidth = ViewUtils.getScreenWidth(mBuilder.mApplicationContext);
+    // // float screenHeight = ViewUtils.getScreenHeight(mBuilder.mApplicationContext);
+    // float widthRate, heightRate;
+    // widthRate = (screenWidth - x) / screenWidth;
+    // heightRate = (screenHeight - y) / screenHeight;
+    // if (widthRate > 0.025 && widthRate < 0.975 && heightRate > 0.025 && heightRate < 0.975) {
+    // b = false;
+    // } else {
+    // b = true;
+    // }
+    // return b;
+    // }
 
     private void startAnimator() {
         if (mBuilder.mInterpolator == null) {
