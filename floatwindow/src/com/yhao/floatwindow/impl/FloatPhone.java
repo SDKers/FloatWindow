@@ -37,7 +37,7 @@ public class FloatPhone extends BaseFloatView {
         // mLayoutParams.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
         // | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS;
         mLayoutParams.format = 1;
-        mLayoutParams.flags = 0x00000020 | 0x00000008 | 0x00000200;
+        mLayoutParams.flags = 0x00000020 | 0x00000008 | 0x00000200 | WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN | WindowManager.LayoutParams.FLAG_LAYOUT_INSET_DECOR;
         mLayoutParams.windowAnimations = 0;
     }
 
