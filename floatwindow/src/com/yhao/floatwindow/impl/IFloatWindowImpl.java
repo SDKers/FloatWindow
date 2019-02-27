@@ -240,6 +240,7 @@ public class IFloatWindowImpl extends BaseFloatWindow {
                 }
 
                 private void onActionDown(MotionEvent event) {
+                    mClick = false;
                     downX = event.getRawX();
                     downY = event.getRawY();
                     lastX = event.getRawX();
