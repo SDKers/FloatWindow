@@ -24,6 +24,11 @@ android {
         debug.setRoot('build-types/debug')
         release.setRoot('build-types/release')
     }
+    dexOptions {
+        preDexLibraries false
+        maxProcessCount 8
+        javaMaxHeapSize "4g"
+    }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_7
         targetCompatibility JavaVersion.VERSION_1_7
@@ -38,9 +43,10 @@ android {
         warningsAsErrors false
         disable "UnusedResources"
         textOutput "stdout"
-        textReport true
+        textReport false
     }
 }
+// 忽略文档编译错误. 设置编码
 tasks.withType(Javadoc) {
     options.addStringOption('Xdoclint:none', '-quiet')
     options.addStringOption('encoding', 'UTF-8')

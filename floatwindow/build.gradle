@@ -1,6 +1,6 @@
 apply plugin: 'com.android.library'
 
-def version="v1.0.9.1";
+def version = "v1.0.9.1";
 android {
     compileSdkVersion 23
     buildToolsVersion "23.0.3"
@@ -25,6 +25,11 @@ android {
         debug.setRoot('build-types/debug')
         release.setRoot('build-types/release')
     }
+    dexOptions {
+        preDexLibraries false
+        maxProcessCount 8
+        javaMaxHeapSize "4g"
+    }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_7
         targetCompatibility JavaVersion.VERSION_1_7
@@ -39,9 +44,10 @@ android {
         warningsAsErrors false
         disable "UnusedResources"
         textOutput "stdout"
-        textReport true
+        textReport false
     }
 }
+// 忽略文档编译错误. 设置编码
 tasks.withType(Javadoc) {
     options.addStringOption('Xdoclint:none', '-quiet')
     options.addStringOption('encoding', 'UTF-8')
@@ -65,8 +71,8 @@ task releaseJar(type: Copy) {
     rename("classes.jar", "floatwindow_" + version + ".jar")
 }
 
-task release(type:Copy,dependsOn: [releaseJar]){
- from("build/outputs/aar")
+task release(type: Copy, dependsOn: [releaseJar]) {
+    from("build/outputs/aar")
     into "../release"
     include("floatwindow-release.aar")
     rename("floatwindow-release.aar", "floatwindow_" + version + ".aar")
