@@ -2,7 +2,7 @@ package com.yhao.floatwindow.interfaces;
 
 import android.view.View;
 
-import com.yhao.floatwindow.annotation.Screen;
+import com.yhao.floatwindow.enums.Screen;
 
 /**
  * @Copyright © 2017 Analysys Inc. All rights reserved.

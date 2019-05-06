@@ -19,7 +19,7 @@ public class Rom {
 
     public static boolean isIntentAvailable(Intent intent, Context context) {
         return intent != null
-            && context.getPackageManager().queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY).size() > 0;
+                && context.getPackageManager().queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY).size() > 0;
     }
 
     public static String getProp(String name) {

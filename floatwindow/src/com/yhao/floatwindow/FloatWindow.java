@@ -7,8 +7,8 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.yhao.floatwindow.annotation.MoveType;
-import com.yhao.floatwindow.annotation.Screen;
+import com.yhao.floatwindow.enums.MoveType;
+import com.yhao.floatwindow.enums.Screen;
 import com.yhao.floatwindow.impl.IFloatWindowImpl;
 import com.yhao.floatwindow.interfaces.BaseFloatWindow;
 import com.yhao.floatwindow.interfaces.ViewStateListener;
@@ -115,7 +115,8 @@ public class FloatWindow {
         private String mTag = DEFAULT_TAG;
 
         @SuppressWarnings("unused")
-        private Builder() {}
+        private Builder() {
+        }
 
         Builder(Context applicationContext) {
             mApplicationContext = applicationContext;
@@ -142,14 +143,14 @@ public class FloatWindow {
         }
 
         public Builder setWidth(Screen screenType, float ratio) {
-            mWidth = (int)((screenType == Screen.WIDTH ? ViewUtils.getScreenWidth(mApplicationContext)
-                : ViewUtils.getScreenHeight(mApplicationContext)) * ratio);
+            mWidth = (int) ((screenType == Screen.WIDTH ? ViewUtils.getScreenWidth(mApplicationContext)
+                    : ViewUtils.getScreenHeight(mApplicationContext)) * ratio);
             return this;
         }
 
         public Builder setHeight(Screen screenType, float ratio) {
-            mHeight = (int)((screenType == Screen.WIDTH ? ViewUtils.getScreenWidth(mApplicationContext)
-                : ViewUtils.getScreenHeight(mApplicationContext)) * ratio);
+            mHeight = (int) ((screenType == Screen.WIDTH ? ViewUtils.getScreenWidth(mApplicationContext)
+                    : ViewUtils.getScreenHeight(mApplicationContext)) * ratio);
             return this;
         }
 
@@ -164,21 +165,21 @@ public class FloatWindow {
         }
 
         public Builder setX(Screen screenType, float ratio) {
-            xOffset = (int)((screenType == Screen.WIDTH ? ViewUtils.getScreenWidth(mApplicationContext)
-                : ViewUtils.getScreenHeight(mApplicationContext)) * ratio);
+            xOffset = (int) ((screenType == Screen.WIDTH ? ViewUtils.getScreenWidth(mApplicationContext)
+                    : ViewUtils.getScreenHeight(mApplicationContext)) * ratio);
             return this;
         }
 
         public Builder setY(Screen screenType, float ratio) {
-            yOffset = (int)((screenType == Screen.WIDTH ? ViewUtils.getScreenWidth(mApplicationContext)
-                : ViewUtils.getScreenHeight(mApplicationContext)) * ratio);
+            yOffset = (int) ((screenType == Screen.WIDTH ? ViewUtils.getScreenWidth(mApplicationContext)
+                    : ViewUtils.getScreenHeight(mApplicationContext)) * ratio);
             return this;
         }
 
         /**
          * 设置 Activity 过滤器，用于指定在哪些界面显示悬浮窗，默认全部界面都显示
          *
-         * @param show 过滤类型,子类类型也会生效
+         * @param show       过滤类型,子类类型也会生效
          * @param activities 过滤界面
          */
         public Builder setFilter(boolean show, Class<?>... activities) {
@@ -194,8 +195,8 @@ public class FloatWindow {
         /**
          * 设置带边距的贴边动画，只有 moveType 为 MoveType.SLIDE，设置边距才有意义，这个方法不标准，后面调整
          *
-         * @param moveType 贴边动画 MoveType.SLIDE
-         * @param slideLeftMargin 贴边动画左边距，默认为 0
+         * @param moveType         贴边动画 MoveType.SLIDE
+         * @param slideLeftMargin  贴边动画左边距，默认为 0
          * @param slideRightMargin 贴边动画右边距，默认为 0
          */
         public Builder setMoveType(MoveType moveType, int slideLeftMargin, int slideRightMargin) {
@@ -237,7 +238,7 @@ public class FloatWindow {
             }
             if (mFloatWindowMap.containsKey(mTag)) {
                 throw new IllegalArgumentException(
-                    "FloatWindow of this tag has been added, Please set a new tag for the new FloatWindow");
+                        "FloatWindow of this tag has been added, Please set a new tag for the new FloatWindow");
             }
             if (mView == null && mLayoutId == 0) {
                 throw new IllegalArgumentException("View has not been set!");

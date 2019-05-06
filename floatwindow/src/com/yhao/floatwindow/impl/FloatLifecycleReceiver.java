@@ -39,6 +39,10 @@ public class FloatLifecycleReceiver extends BroadcastReceiver implements Applica
     private boolean appBackground;
     private LifecycleListener mLifecycleListener;
 
+
+    private FloatLifecycleReceiver() {
+    }
+
     public FloatLifecycleReceiver(Context applicationContext, boolean showFlag, Class<?>[] activities,
                                   LifecycleListener lifecycleListener) {
         this.showFlag = showFlag;

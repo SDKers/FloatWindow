@@ -9,23 +9,30 @@ package com.yhao.floatwindow.interfaces;
  */
 public class ViewStateListenerAdapter implements ViewStateListener {
     @Override
-    public void onPositionUpdate(int x, int y) {}
+    public void onPositionUpdate(int x, int y) {
+    }
 
     @Override
-    public void onShow() {}
+    public void onShow() {
+    }
 
     @Override
-    public void onHide() {}
+    public void onHide() {
+    }
 
     @Override
-    public void onDismiss() {}
+    public void onDismiss() {
+    }
 
     @Override
-    public void onMoveAnimStart() {}
+    public void onMoveAnimStart() {
+    }
 
     @Override
-    public void onMoveAnimEnd() {}
+    public void onMoveAnimEnd() {
+    }
 
     @Override
-    public void onBackToDesktop() {}
+    public void onBackToDesktop() {
+    }
 }

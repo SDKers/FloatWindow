@@ -1,15 +1,15 @@
 package com.yhao.floatwindow.impl;
 
+import android.content.Context;
+import android.os.Build;
+import android.view.View;
+import android.view.WindowManager;
+
 import com.yhao.floatwindow.FloatActivity;
 import com.yhao.floatwindow.interfaces.BaseFloatView;
 import com.yhao.floatwindow.permission.PermissionListener;
 import com.yhao.floatwindow.utils.L;
 import com.yhao.floatwindow.utils.Miui;
-
-import android.content.Context;
-import android.os.Build;
-import android.view.View;
-import android.view.WindowManager;
 
 /**
  * @Copyright © 2017 Analysys Inc. All rights reserved.
@@ -31,7 +31,7 @@ public class FloatPhone extends BaseFloatView {
     public FloatPhone(Context applicationContext, PermissionListener permissionListener) {
         mContext = applicationContext;
         mPermissionListener = permissionListener;
-        mWindowManager = (WindowManager)applicationContext.getSystemService(Context.WINDOW_SERVICE);
+        mWindowManager = (WindowManager) applicationContext.getSystemService(Context.WINDOW_SERVICE);
         mLayoutParams = new WindowManager.LayoutParams();
         // mLayoutParams.format = PixelFormat.RGBA_8888;
         // mLayoutParams.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL

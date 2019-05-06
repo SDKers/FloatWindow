@@ -19,7 +19,7 @@ import java.util.List;
 
 /**
  * @Copyright © 2017 Analysys Inc. All rights reserved.
- * @Description:               <pre>
+ * @Description: <pre>
  *   需要清楚：一个MIUI版本对应小米各种机型，基于不同的安卓版本，但是权限设置页跟MIUI版本有关
  *   测试TYPE_TOAST类型：
  *   7.0：

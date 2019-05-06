@@ -21,11 +21,14 @@ public abstract class BaseFloatView {
 
     public abstract void dismiss();
 
-    public void updateXY(int x, int y) {}
+    public void updateXY(int x, int y) {
+    }
 
-    public void updateX(int x) {}
+    public void updateX(int x) {
+    }
 
-    public void updateY(int y) {}
+    public void updateY(int y) {
+    }
 
     public int getX() {
         return 0;

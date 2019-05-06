@@ -1,10 +1,5 @@
 package com.example.fixedfloatwindow;
 
-import com.yhao.floatwindow.FloatWindow;
-import com.yhao.floatwindow.annotation.MoveType;
-import com.yhao.floatwindow.annotation.Screen;
-import com.yhao.floatwindow.interfaces.BaseFloatWindow;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,6 +8,11 @@ import android.view.View;
 import android.view.animation.BounceInterpolator;
 import android.widget.ImageView;
 import android.widget.Toast;
+
+import com.yhao.floatwindow.FloatWindow;
+import com.yhao.floatwindow.enums.MoveType;
+import com.yhao.floatwindow.enums.Screen;
+import com.yhao.floatwindow.interfaces.BaseFloatWindow;
 
 public class MainActivity extends Activity {
 
@@ -33,9 +33,9 @@ public class MainActivity extends Activity {
         mImageView = new ImageView(getApplicationContext());
         mImageView2 = new ImageView(getApplicationContext());
         mBuilderA = FloatWindow.with(getApplicationContext()).setView(mImageView).setWidth(Screen.WIDTH, 0.2f)
-            .setHeight(Screen.WIDTH, 0.2f).setX(Screen.WIDTH, 0.8f).setY(Screen.HEIGHT, 0.3f)
-            .setMoveType(MoveType.SLIDE).setMoveStyle(500, new BounceInterpolator()).setDesktopShow(true)
-            .setTag("mFirstWindow");
+                .setHeight(Screen.WIDTH, 0.2f).setX(Screen.WIDTH, 0.8f).setY(Screen.HEIGHT, 0.3f)
+                .setMoveType(MoveType.SLIDE).setMoveStyle(500, new BounceInterpolator()).setDesktopShow(true)
+                .setTag("mFirstWindow");
 
     }
 

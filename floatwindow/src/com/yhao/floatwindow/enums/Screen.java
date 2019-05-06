@@ -1,4 +1,4 @@
-package com.yhao.floatwindow.annotation;
+package com.yhao.floatwindow.enums;
 
 /**
  * @Copyright © 2019 Analysys Inc. All rights reserved.
