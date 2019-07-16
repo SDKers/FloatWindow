@@ -16,7 +16,7 @@ do
     rm -rf $element/gen/
     rm -rf $element/.settings/
     rm -rf $element/.externalNativeBuild
-    rm -rf *.iml
+    rm -rf $element/$element.iml
 done
 
 rm -rf build/
