@@ -1,9 +1,11 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.3"
-
+    compileSdkVersion 28
+    buildToolsVersion "28.0.3"
+    defaultConfig {
+        minSdkVersion 14
+    }
     buildTypes {
         release {
             minifyEnabled false
@@ -54,6 +56,6 @@ tasks.withType(Javadoc) {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile project(':floatwindow')
+//    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation project(':floatwindow')
 }
