@@ -2,7 +2,7 @@ package com.yhao.floatwindow.interfaces;
 
 import android.view.View;
 
-import com.yhao.floatwindow.enums.Screen;
+import com.yhao.floatwindow.enums.EScreen;
 
 /**
  * @Copyright © 2017 Analysys Inc. All rights reserved.
@@ -24,11 +24,11 @@ public abstract class BaseFloatWindow {
 
     public abstract void updateX(int x);
 
-    public abstract void updateX(Screen screenType, float ratio);
+    public abstract void updateX(EScreen screenType, float ratio);
 
     public abstract void updateY(int y);
 
-    public abstract void updateY(Screen screenType, float ratio);
+    public abstract void updateY(EScreen screenType, float ratio);
 
     public abstract View getView();
 

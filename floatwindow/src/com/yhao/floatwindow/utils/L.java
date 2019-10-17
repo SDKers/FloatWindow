@@ -41,7 +41,7 @@ import javax.xml.transform.stream.StreamSource;
 
 /**
  * @Copyright © 2015 sanbo Inc. All rights reserved.
- * @Description              <pre>
+ * @Description <pre>
  * Log统一管理类,提供功能：
  * 1.log工具类支持全部打印   「支持Log的所有功能.」
  * 2.支持类似C的格式化输出或Java的String.format「%个数和参数个数需要一直才能格式化」
@@ -75,7 +75,7 @@ public class L {
     // 是否格式化展示,主要针对JSON
     private static boolean isFormat = false;
     // 默认tag
-    private static String DEFAULT_TAG = "SFloatWindow";
+    private static String DEFAULT_TAG = "FloatWindow";
     // 临时tag.用法：调用log中大于1个参数,且第一个参数为字符串,且不是format用法,字符串长度没超过协议值,此时启用临时tag
     private static String TEMP_TAG = "";
     // 规定每段显示的长度.每行最大日志长度 (Android Studio3.1最多2902字符)
@@ -111,9 +111,15 @@ public class L {
     private static String CONTENT_WARNNING_SHELL =
             "Wranning....不够打印级别,请在命令行设置指令后重新尝试打印,命令行指令: adb shell setprop log.tag." + DEFAULT_TAG + " ";
     private static Character FORMATER = '%';
+    private static List<String> names = Arrays.asList(new String[]{"$change", "this$0"});
 
     private L() {
     }
+
+    /*********************************************************************************************************/
+    /**
+     * 支持可变参数打印,根据不同的结构支持. 可以统一成一个接口
+     */
 
     /**
      * 初始化接口
@@ -138,10 +144,6 @@ public class L {
         }
     }
 
-    /*********************************************************************************************************/
-    /**
-     * 支持可变参数打印,根据不同的结构支持. 可以统一成一个接口
-     */
     /*********************************************************************************************************/
     public static void v(Object... args) {
         if (isShellControl) {
@@ -320,6 +322,12 @@ public class L {
 
     }
 
+    /*********************************************************************************************************/
+    /**
+     * 基础工具方法
+     */
+    /*********************************************************************************************************/
+
     /**
      * 处理对象
      *
@@ -349,12 +357,6 @@ public class L {
         }
         return sb.toString();
     }
-
-    /*********************************************************************************************************/
-    /**
-     * 基础工具方法
-     */
-    /*********************************************************************************************************/
 
     /**
      * <pre>
@@ -487,14 +489,14 @@ public class L {
     }
 
     /*********************************************************************************************************/
-    private static String objectToString(Object object) {
-        return objectToString(object, 0);
-    }
-
-    /*********************************************************************************************************/
     /**
      * 解析对象成字符串
      */
+
+    /*********************************************************************************************************/
+    private static String objectToString(Object object) {
+        return objectToString(object, 0);
+    }
 
     /**
      * 是否为静态内部类
@@ -618,14 +620,14 @@ public class L {
                     continue;
                 }
 
-                if (field.getName().equals("$change")) {
+                if ("$change".equals(field.getName())) {
                     continue;
                 }
                 // 解决Instant Run情况下内部类死循环的问题
                 // System.out.println(field.getName()+ "***" +subObject.getClass() + "啊啊啊啊啊啊" +
                 // cla);
                 if (!isStaticInnerClass(cla)
-                        && (field.getName().equals("$change") || field.getName().equalsIgnoreCase("this$0"))) {
+                        && ("$change".equals(field.getName()) || "this$0".equalsIgnoreCase(field.getName()))) {
                     continue;
                 }
                 Object subObject = null;
@@ -802,7 +804,7 @@ public class L {
             if ("org.aspectj.lang.JoinPoint$StaticPart".equals(f.getType().getName())) {
                 continue;
             }
-            if (f.getName().equals("$change") || f.getName().equalsIgnoreCase("this$0")) {
+            if (names.contains(f.getName())) {
                 continue;
             }
             try {
@@ -821,7 +823,7 @@ public class L {
             if ("org.aspectj.lang.JoinPoint$StaticPart".equals(field.getType().getName())) {
                 continue;
             }
-            if (field.getName().equals("$change") || field.getName().equalsIgnoreCase("this$0")) {
+            if (names.contains(field.getName())) {
                 continue;
             }
             try {
@@ -991,7 +993,7 @@ public class L {
             for (int i = 0; i < ss.length; i++) {
                 s = ss[i];
                 // 一般首第一个字符不知道是什么东西
-                if (s.substring(1, 3).equalsIgnoreCase("at")) {
+                if ("at".equalsIgnoreCase(s.substring(1, 3))) {
                     // 部分堆栈怕其他行缩进失误
                     // if (i > 0) {
                     sb.append(CONTENT_SPACE).append(s);
@@ -1069,7 +1071,7 @@ public class L {
                 if (field.getName().startsWith("FLAG_")) {
                     int value = 0;
                     Object object = field.get(cla);
-                    if (object instanceof Integer || object.getClass().getSimpleName().equals("int")) {
+                    if (object instanceof Integer || "int".equals(object.getClass().getSimpleName())) {
                         value = (Integer) object;
                     }
 

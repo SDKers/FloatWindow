@@ -9,8 +9,16 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 
+import com.yhao.floatwindow.interfaces.IConfigChanged;
 import com.yhao.floatwindow.interfaces.LifecycleListener;
 import com.yhao.floatwindow.interfaces.ResumedListener;
+import com.yhao.floatwindow.utils.FwContent;
+import com.yhao.floatwindow.utils.L;
+import com.yhao.floatwindow.utils.RotateUtil;
+import com.yhao.floatwindow.utils.ViewUtils;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @Copyright © 2017 Analysys Inc. All rights reserved.
@@ -37,8 +45,10 @@ public class FloatLifecycleReceiver extends BroadcastReceiver implements Applica
     private int startCount;
     private int resumeCount;
     private boolean appBackground;
-    private LifecycleListener mLifecycleListener;
-
+    private LifecycleListener mLifecycleListener = null;
+    private IConfigChanged mConfigChange = null;
+    // 存储当前页面的信息，为切换页面时作为上个页面进行旋转屏幕比较
+    private Map<String, Boolean> mActivityAndLandscape = new HashMap<String, Boolean>();
 
     private FloatLifecycleReceiver() {
     }
@@ -70,8 +80,21 @@ public class FloatLifecycleReceiver extends BroadcastReceiver implements Applica
         return !showFlag;
     }
 
+
+    public void setConfigChanged(IConfigChanged configChanged) {
+        if (configChanged != null) {
+            mConfigChange = configChanged;
+        }
+    }
+
+
     @Override
     public void onActivityResumed(Activity activity) {
+        if (mConfigChange != null) {
+            mConfigChange.onBackToDesktop(false);
+        }
+        checkConfigChangeWhenResume(activity);
+
         if (sResumedListener != null) {
             num--;
             if (num == 0) {
@@ -90,8 +113,14 @@ public class FloatLifecycleReceiver extends BroadcastReceiver implements Applica
         }
     }
 
+
     @Override
     public void onActivityPaused(final Activity activity) {
+        if (mConfigChange != null) {
+            mConfigChange.onBackToDesktop(false);
+        }
+        checkConfigChangeWhenPause(activity);
+
         resumeCount--;
         mHandler.postDelayed(new Runnable() {
             @Override
@@ -99,11 +128,15 @@ public class FloatLifecycleReceiver extends BroadcastReceiver implements Applica
                 if (resumeCount == 0) {
                     appBackground = true;
                     mLifecycleListener.onBackToDesktop();
+                    if (mConfigChange != null) {
+                        mConfigChange.onBackToDesktop(true);
+                    }
                 }
             }
         }, DELAY);
 
     }
+
 
     @Override
     public void onActivityStarted(Activity activity) {
@@ -112,9 +145,15 @@ public class FloatLifecycleReceiver extends BroadcastReceiver implements Applica
 
     @Override
     public void onActivityStopped(Activity activity) {
+        if (mConfigChange != null) {
+            mConfigChange.onBackToDesktop(false);
+        }
         startCount--;
         if (startCount == 0) {
             mLifecycleListener.onBackToDesktop();
+            if (mConfigChange != null) {
+                mConfigChange.onBackToDesktop(true);
+            }
         }
     }
 
@@ -125,27 +164,85 @@ public class FloatLifecycleReceiver extends BroadcastReceiver implements Applica
             String reason = intent.getStringExtra(SYSTEM_DIALOG_REASON_KEY);
             if (SYSTEM_DIALOG_REASON_HOME_KEY.equals(reason)) {
                 mLifecycleListener.onBackToDesktop();
+                if (mConfigChange != null) {
+                    mConfigChange.onBackToDesktop(true);
+                }
             }
         }
     }
 
     @Override
     public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
-
     }
 
     @Override
     public void onActivitySaveInstanceState(Activity activity, Bundle outState) {
-
     }
 
     @Override
     public void onActivityDestroyed(Activity activity) {
-
     }
 
     public void unRegisterReceiver(Context context) {
         ((Application) context).unregisterActivityLifecycleCallbacks(this);
         context.unregisterReceiver(this);
+    }
+
+
+    /**
+     * 页面展示时检查是否页面旋转。逻辑: 和上个页面对比
+     *
+     * @param activity
+     */
+    private void checkConfigChangeWhenResume(Activity activity) {
+        if (mActivityAndLandscape.size() > 0) {
+            mActivityAndLandscape.clear();
+        }
+        if (FwContent.isDebug) {
+            L.i("------checkConfigChangeWhenResume----mActivityAndLandscape： " + mActivityAndLandscape.size());
+        }
+        RotateUtil.getInstance().start(activity);
+        String activityName = activity.getPackageName() + "." + activity.getLocalClassName();
+        if (mActivityAndLandscape.size() < 1) {
+            // 有悬浮窗后的,首次切换页面
+            mActivityAndLandscape.put(activityName, ViewUtils.isActivityLandscape(activity));
+            if (mConfigChange != null) {
+                mConfigChange.onActivityConfigChanged();
+            }
+        } else {
+            if (mActivityAndLandscape.containsKey(activityName)) {
+                boolean isLandscape = ViewUtils.isActivityLandscape(activity);
+                if (mActivityAndLandscape.get(activityName) != isLandscape) {
+                    mActivityAndLandscape.put(activityName, isLandscape);
+                    if (mConfigChange != null) {
+                        mConfigChange.onActivityConfigChanged();
+                    }
+                } else {
+                    // 页面方向未变
+                }
+            } else {
+                mActivityAndLandscape.clear();
+                // 有悬浮窗后的,首次切换页面
+                mActivityAndLandscape.put(activityName, ViewUtils.isActivityLandscape(activity));
+                if (mConfigChange != null) {
+                    mConfigChange.onActivityConfigChanged();
+                }
+            }
+        }
+    }
+
+    /**
+     * 页面关闭时检查页面监听监视
+     *
+     * @param activity
+     */
+    private void checkConfigChangeWhenPause(Activity activity) {
+        RotateUtil.getInstance().start(activity);
+
+        if (mActivityAndLandscape.size() < 1) {
+            // 有悬浮窗后的,首次关闭页面-(兼容页面打开，才展示悬浮窗，此时map无此页面信息)
+            String activityName = activity.getPackageName() + "." + activity.getLocalClassName();
+            mActivityAndLandscape.put(activityName, ViewUtils.isActivityLandscape(activity));
+        }
     }
 }

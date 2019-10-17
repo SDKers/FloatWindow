@@ -14,12 +14,17 @@ import android.view.ViewConfiguration;
 import android.view.animation.DecelerateInterpolator;
 
 import com.yhao.floatwindow.FloatWindow;
-import com.yhao.floatwindow.enums.MoveType;
-import com.yhao.floatwindow.enums.Screen;
+import com.yhao.floatwindow.enums.EMoveType;
+import com.yhao.floatwindow.enums.EScreen;
+import com.yhao.floatwindow.enums.ETypeRotateChange;
 import com.yhao.floatwindow.interfaces.BaseFloatView;
 import com.yhao.floatwindow.interfaces.BaseFloatWindow;
+import com.yhao.floatwindow.interfaces.IConfigChanged;
+import com.yhao.floatwindow.interfaces.ISensorRotateChanged;
 import com.yhao.floatwindow.interfaces.LifecycleListener;
+import com.yhao.floatwindow.utils.FwContent;
 import com.yhao.floatwindow.utils.L;
+import com.yhao.floatwindow.utils.RotateUtil;
 import com.yhao.floatwindow.utils.ViewUtils;
 
 /**
@@ -46,6 +51,8 @@ public class IFloatWindowImpl extends BaseFloatWindow {
     private boolean mClick = false;
     private int mSlop;
     private int screenWidth, screenHeight;
+    // 返回桌面
+    private boolean isBackToDesktop = false;
 
     @SuppressWarnings("unused")
     private IFloatWindowImpl() {
@@ -58,7 +65,7 @@ public class IFloatWindowImpl extends BaseFloatWindow {
         mBuilder = b;
         checkScreenSize();
 
-        if (mBuilder.mMoveType == MoveType.FIXED) {
+        if (mBuilder.mMoveType == EMoveType.FIXED) {
             if (Build.VERSION.SDK_INT >= 25) {
                 mFloatView = new FloatPhone(b.mApplicationContext, mBuilder.mPermissionListener);
             } else {
@@ -95,6 +102,65 @@ public class IFloatWindowImpl extends BaseFloatWindow {
                         }
                     }
                 });
+
+        if (mBuilder != null && mBuilder.isAutoRotate) {
+            if (mFloatLifecycle != null) {
+                mFloatLifecycle.setConfigChanged(new IConfigChanged() {
+                    @Override
+                    public void onActivityConfigChanged() {
+                        onPhoneConfigChanged(ETypeRotateChange.T_ACTIVITY_ROTATE);
+                    }
+
+                    @Override
+                    public void onBackToDesktop(boolean isBack) {
+                        isBackToDesktop = isBack;
+                    }
+                });
+            }
+
+            RotateUtil.getInstance().setRotateChanged(new ISensorRotateChanged() {
+                @Override
+                public void onRotateChanged() {
+                    onPhoneConfigChanged(ETypeRotateChange.T_SENSOR_ROTATE);
+                }
+            });
+        }
+
+    }
+
+
+    /**
+     * 旋转时操作，处理方式:
+     * 1. 更新页面的尺寸
+     * 2. 矫正组件到可见区域.暂时不会按照屏幕等比例移动(如竖屏右下，旋转后移动到横屏右下)
+     *
+     * @param rotateType 旋转类型
+     */
+    private void onPhoneConfigChanged(ETypeRotateChange rotateType) {
+        checkScreenSize();
+        if (FwContent.isDebug) {
+            L.i(rotateType + "  [" + screenWidth + "*" + screenHeight + "]------> " + getX() + " * " + getY() + "------" + isBackToDesktop);
+        }
+//        // 应用内，不使用手机旋转(即传感器方向)
+//        if (!isBackToDesktop && rotateType == ETypeRotateChange.T_SENSOR_ROTATE) {
+//            return;
+//        }
+        //超出屏幕  移动到屏幕中间，确保超出屏幕的case能兼容处理
+        if (Math.abs(getX() - screenWidth) > screenWidth / 3 || Math.abs(getY() - screenHeight) > screenWidth / 3
+                || screenHeight == getY()
+        ) {
+            if (FwContent.isDebug) {
+                L.w("超出屏幕...即将自动校正....");
+            }
+            updateX(screenWidth - 200);
+            updateY(screenHeight * 2 / 3);
+        } else {
+            if (FwContent.isDebug) {
+                L.d("未超出屏幕....");
+            }
+        }
+
+
     }
 
     @Override
@@ -167,22 +233,22 @@ public class IFloatWindowImpl extends BaseFloatWindow {
     }
 
     @Override
-    public void updateX(Screen screenType, float ratio) {
+    public void updateX(EScreen screenType, float ratio) {
         checkMoveType();
 
-        // mBuilder.xOffset = (int)((screenType == Screen.WIDTH ? ViewUtils.getScreenWidth(mBuilder.mApplicationContext)
+        // mBuilder.xOffset = (int)((screenType == EScreen.WIDTH ? ViewUtils.getScreenWidth(mBuilder.mApplicationContext)
         // : ViewUtils.getScreenHeight(mBuilder.mApplicationContext)) * ratio);
-        mBuilder.xOffset = (int) ((screenType == Screen.WIDTH ? screenWidth : screenHeight) * ratio);
+        mBuilder.xOffset = (int) ((screenType == EScreen.WIDTH ? screenWidth : screenHeight) * ratio);
         mFloatView.updateX(mBuilder.xOffset);
 
     }
 
     @Override
-    public void updateY(Screen screenType, float ratio) {
+    public void updateY(EScreen screenType, float ratio) {
         checkMoveType();
-        // mBuilder.yOffset = (int)((screenType == Screen.WIDTH ? ViewUtils.getScreenWidth(mBuilder.mApplicationContext)
+        // mBuilder.yOffset = (int)((screenType == EScreen.WIDTH ? ViewUtils.getScreenWidth(mBuilder.mApplicationContext)
         // : ViewUtils.getScreenHeight(mBuilder.mApplicationContext)) * ratio);
-        mBuilder.yOffset = (int) ((screenType == Screen.WIDTH ? screenWidth : screenHeight) * ratio);
+        mBuilder.yOffset = (int) ((screenType == EScreen.WIDTH ? screenWidth : screenHeight) * ratio);
         mFloatView.updateY(mBuilder.yOffset);
 
     }
@@ -204,14 +270,14 @@ public class IFloatWindowImpl extends BaseFloatWindow {
     }
 
     private void checkMoveType() {
-        if (mBuilder.mMoveType == MoveType.FIXED) {
+        if (mBuilder.mMoveType == EMoveType.FIXED) {
             throw new IllegalArgumentException("FloatWindow of this tag is not allowed to move!");
         }
     }
 
     private void initTouchEvent() {
         checkScreenSize();
-        if (mBuilder.mMoveType != MoveType.INACTIVE) {
+        if (mBuilder.mMoveType != EMoveType.INACTIVE) {
             getView().setOnTouchListener(new View.OnTouchListener() {
                 float lastX, lastY, changeX, changeY;
                 int newX, newY;
@@ -270,7 +336,7 @@ public class IFloatWindowImpl extends BaseFloatWindow {
                     mClick = (Math.abs(upX - downX) > mSlop) || (Math.abs(upY - downY) > mSlop);
                     // L.i("Raw [%f x %f] -- FloatView[%d x %d] 分辨率(%d---%d) ", upX, upY, mFloatView.getX(),
                     // mFloatView.getY(), screenWidth, screenHeight);
-                    if (mBuilder.mMoveType == MoveType.SLIDE) {
+                    if (mBuilder.mMoveType == EMoveType.SLIDE) {
                         int startX = mFloatView.getX();
                         int startY = mFloatView.getY();
                         // 如果图标滑动的坐标是在哪部分，根据坐标和边缘距离计算，相应的坐标
@@ -307,7 +373,7 @@ public class IFloatWindowImpl extends BaseFloatWindow {
                             });
                         }
                         startAnimator();
-                    } else if (mBuilder.mMoveType == MoveType.BACK) {
+                    } else if (mBuilder.mMoveType == EMoveType.BACK) {
                         PropertyValuesHolder pvhX =
                                 PropertyValuesHolder.ofInt("x", mFloatView.getX(), mBuilder.xOffset);
                         PropertyValuesHolder pvhY =
@@ -373,12 +439,12 @@ public class IFloatWindowImpl extends BaseFloatWindow {
      * 初始化屏幕分辨率
      */
     private void checkScreenSize() {
-        if (screenWidth == 0) {
-            screenWidth = ViewUtils.getScreenWidth(mBuilder.mApplicationContext);
-        }
-        if (screenHeight == 0) {
-            screenHeight = ViewUtils.getScreenHeight(mBuilder.mApplicationContext);
-        }
+//        if (screenWidth == 0) {
+        screenWidth = ViewUtils.getScreenWidth(mBuilder.mApplicationContext);
+//        }
+//        if (screenHeight == 0) {
+        screenHeight = ViewUtils.getScreenHeight(mBuilder.mApplicationContext);
+//        }
     }
 
     private void cancelAnimator() {
@@ -387,28 +453,29 @@ public class IFloatWindowImpl extends BaseFloatWindow {
         }
     }
 
-    // /**
-    // * 判断是否超出范围，根据自己需求设置比例大小，我自己设置的是0.025和0.975
-    // * 这是合并一个哥们 没有完善。暂时不使用
-    // * https://github.com/yhaolpz/FloatWindow/pull/89/commits/f48b0ea10351246da43bf7e259855a91e1314dbc
-    // * @param x event.getRawX()
-    // * @param y event.getRawY()
-    // * @return
-    // */
-    // private boolean isOutOfRange(float x, float y) {
-    // boolean b = true;
-    // // float screenWidth = ViewUtils.getScreenWidth(mBuilder.mApplicationContext);
-    // // float screenHeight = ViewUtils.getScreenHeight(mBuilder.mApplicationContext);
-    // float widthRate, heightRate;
-    // widthRate = (screenWidth - x) / screenWidth;
-    // heightRate = (screenHeight - y) / screenHeight;
-    // if (widthRate > 0.025 && widthRate < 0.975 && heightRate > 0.025 && heightRate < 0.975) {
-    // b = false;
-    // } else {
-    // b = true;
-    // }
-    // return b;
-    // }
+//    /**
+//     * 判断是否超出范围，根据自己需求设置比例大小，我自己设置的是0.025和0.975
+//     * 这是合并一个哥们 没有完善。暂时不使用
+//     * https://github.com/yhaolpz/FloatWindow/pull/89/commits/f48b0ea10351246da43bf7e259855a91e1314dbc
+//     *
+//     * @param x event.getRawX()
+//     * @param y event.getRawY()
+//     * @return
+//     */
+//    private boolean isOutOfRange(float x, float y) {
+//        boolean b = true;
+//        // float screenWidth = ViewUtils.getScreenWidth(mBuilder.mApplicationContext);
+//        // float screenHeight = ViewUtils.getScreenHeight(mBuilder.mApplicationContext);
+//        float widthRate, heightRate;
+//        widthRate = (screenWidth - x) / screenWidth;
+//        heightRate = (screenHeight - y) / screenHeight;
+//        if (widthRate > 0.025 && widthRate < 0.975 && heightRate > 0.025 && heightRate < 0.975) {
+//            b = false;
+//        } else {
+//            b = true;
+//        }
+//        return b;
+//    }
 
     private void startAnimator() {
         if (mBuilder.mInterpolator == null) {

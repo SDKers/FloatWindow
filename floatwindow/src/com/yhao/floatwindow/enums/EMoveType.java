@@ -15,6 +15,10 @@ package com.yhao.floatwindow.enums;
  * @Create: Feb 19, 2019 11:32:21 AM
  * @Author: sanbo
  */
-public enum MoveType {
-    FIXED, INACTIVE, ACTIVE, SLIDE, BACK
+public enum EMoveType {
+    FIXED,
+    INACTIVE,
+    ACTIVE,
+    SLIDE,
+    BACK
 }

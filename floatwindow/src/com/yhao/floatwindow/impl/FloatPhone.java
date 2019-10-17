@@ -36,8 +36,15 @@ public class FloatPhone extends BaseFloatView {
         // mLayoutParams.format = PixelFormat.RGBA_8888;
         // mLayoutParams.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
         // | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS;
+
+        //PixelFormat.RGBA_8888
         mLayoutParams.format = 1;
-        mLayoutParams.flags = 0x00000020 | 0x00000008 | 0x00000200 | WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN | WindowManager.LayoutParams.FLAG_LAYOUT_INSET_DECOR;
+        // WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL: 0x00000020
+        // WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE: 0x00000008
+        // WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS: 0x00000200
+        // WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN: 0x00000100
+        // WindowManager.LayoutParams.FLAG_LAYOUT_INSET_DECOR: 0x00010000
+        mLayoutParams.flags = 0x00000020 | 0x00000008 | 0x00000200 | 0x00000100 | 0x00010000;
         mLayoutParams.windowAnimations = 0;
     }
 
@@ -67,7 +74,9 @@ public class FloatPhone extends BaseFloatView {
             if (Build.VERSION.SDK_INT >= 23) {
                 req();
             } else {
-                mLayoutParams.type = WindowManager.LayoutParams.TYPE_PHONE;
+                // 避免方法警告
+                // WindowManager.LayoutParams.TYPE_PHONE: 2002
+                mLayoutParams.type = 2002;
                 Miui.requestPermission(mContext, new PermissionListener() {
                     @Override
                     public void onSuccess() {
@@ -87,7 +96,9 @@ public class FloatPhone extends BaseFloatView {
             }
         } else {
             try {
-                mLayoutParams.type = WindowManager.LayoutParams.TYPE_TOAST;
+                // 避免过时方法警告
+                // WindowManager.LayoutParams.TYPE_TOAST:2005
+                mLayoutParams.type = 2005;
                 mWindowManager.addView(mView, mLayoutParams);
             } catch (Exception e) {
                 mWindowManager.removeView(mView);
@@ -98,12 +109,13 @@ public class FloatPhone extends BaseFloatView {
     }
 
     private void req() {
-        // if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-        // mLayoutParams.type = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;
+        //Build.VERSION_CODES.O: 26
         if (Build.VERSION.SDK_INT >= 26) {
+            //WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY: 2038
             mLayoutParams.type = 2038;
         } else {
-            mLayoutParams.type = WindowManager.LayoutParams.TYPE_PHONE;
+            //WindowManager.LayoutParams.TYPE_PHONE: 2002
+            mLayoutParams.type = 2002;
         }
         FloatActivity.request(mContext, new PermissionListener() {
             @Override

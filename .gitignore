@@ -18,12 +18,14 @@ __MACOSX
 
 #test android studio module
 *androidTest/
-out
+*/out/
 *.gradle/
-release
-build
-*bin/
-*gen/
+*/release/
+*/build/
+build/
+release/
+*/bin/
+*/gen/
 
 #for eclipse
 .settings/
@@ -33,3 +35,4 @@ local.properties
 *.bak
 
 *.pmd
+*.wiki/

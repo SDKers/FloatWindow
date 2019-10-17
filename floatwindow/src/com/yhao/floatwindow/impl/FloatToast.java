@@ -77,8 +77,11 @@ public class FloatToast extends BaseFloatView {
             Field tnParamsField = mTN.getClass().getDeclaredField("mParams");
             tnParamsField.setAccessible(true);
             WindowManager.LayoutParams params = (WindowManager.LayoutParams) tnParamsField.get(mTN);
-            params.flags =
-                    WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN | WindowManager.LayoutParams.FLAG_LAYOUT_INSET_DECOR;
+            // WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL: 0x00000020
+            // WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE: 0x00000008
+            // WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN: 0x00000100
+            // WindowManager.LayoutParams.FLAG_LAYOUT_INSET_DECOR: 0x00010000
+            params.flags = 0x00000020 | 0x00000008 | 0x00000100 | 0x00010000;
             params.width = mWidth;
             params.height = mHeight;
             params.windowAnimations = 0;

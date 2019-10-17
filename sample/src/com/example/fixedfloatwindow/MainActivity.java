@@ -10,8 +10,8 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.yhao.floatwindow.FloatWindow;
-import com.yhao.floatwindow.enums.MoveType;
-import com.yhao.floatwindow.enums.Screen;
+import com.yhao.floatwindow.enums.EMoveType;
+import com.yhao.floatwindow.enums.EScreen;
 import com.yhao.floatwindow.interfaces.BaseFloatWindow;
 
 public class MainActivity extends Activity {
@@ -32,9 +32,9 @@ public class MainActivity extends Activity {
     private void initUI() {
         mImageView = new ImageView(getApplicationContext());
         mImageView2 = new ImageView(getApplicationContext());
-        mBuilderA = FloatWindow.with(getApplicationContext()).setView(mImageView).setWidth(Screen.WIDTH, 0.2f)
-                .setHeight(Screen.WIDTH, 0.2f).setX(Screen.WIDTH, 0.8f).setY(Screen.HEIGHT, 0.3f)
-                .setMoveType(MoveType.SLIDE).setMoveStyle(500, new BounceInterpolator()).setDesktopShow(true)
+        mBuilderA = FloatWindow.with(getApplicationContext()).setView(mImageView).setWidth(EScreen.WIDTH, 0.2f)
+                .setHeight(EScreen.WIDTH, 0.2f).setX(EScreen.WIDTH, 0.8f).setY(EScreen.HEIGHT, 0.3f)
+                .setMoveType(EMoveType.SLIDE).setMoveStyle(500, new BounceInterpolator()).setDesktopShow(true)
                 .setTag("mFirstWindow");
 
     }
@@ -49,13 +49,9 @@ public class MainActivity extends Activity {
                 break;
             case R.id.btnReqPermission:
                 // 申请权限且不构建. 完善中
-                // FloatWindow.prepare(this);
                 break;
             case R.id.btnOnlyBuild:
                 // 构建不加载
-                // if (mBuilderA != null) {
-                // mBuilderA.build();
-                // }
                 break;
             case R.id.btnInitAndShowA:
                 // 初始化展示

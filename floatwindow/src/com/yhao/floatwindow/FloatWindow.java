@@ -7,12 +7,13 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.yhao.floatwindow.enums.MoveType;
-import com.yhao.floatwindow.enums.Screen;
+import com.yhao.floatwindow.enums.EMoveType;
+import com.yhao.floatwindow.enums.EScreen;
 import com.yhao.floatwindow.impl.IFloatWindowImpl;
 import com.yhao.floatwindow.interfaces.BaseFloatWindow;
 import com.yhao.floatwindow.interfaces.ViewStateListener;
 import com.yhao.floatwindow.permission.PermissionListener;
+import com.yhao.floatwindow.utils.FwContent;
 import com.yhao.floatwindow.utils.L;
 import com.yhao.floatwindow.utils.ViewUtils;
 
@@ -28,8 +29,7 @@ import java.util.Map;
  */
 public class FloatWindow {
 
-    private static final String VERSION = "v1.0.9.1";
-    private static final String DEFAULT_TAG = "default_float_window_tag";
+
     private static Map<String, BaseFloatWindow> mFloatWindowMap;
     @SuppressWarnings("unused")
     private static Builder mBuilder = null;
@@ -39,7 +39,7 @@ public class FloatWindow {
     }
 
     public static BaseFloatWindow get() {
-        return get(DEFAULT_TAG);
+        return get(FwContent.DEFAULT_TAG);
     }
 
     public static BaseFloatWindow get(String tag) {
@@ -54,7 +54,7 @@ public class FloatWindow {
      * 销毁默认tag的
      */
     public static void destroy() {
-        destroy(DEFAULT_TAG);
+        destroy(FwContent.DEFAULT_TAG);
     }
 
     /**
@@ -102,8 +102,10 @@ public class FloatWindow {
         public int xOffset;
         public int yOffset;
         public boolean mShow = true;
+        //自动旋转屏幕. 默认旋转
+        public boolean isAutoRotate = true;
         public Class<?>[] mActivities;
-        public MoveType mMoveType = MoveType.SLIDE;
+        public EMoveType mMoveType = EMoveType.SLIDE;
         public int mSlideLeftMargin;
         public int mSlideRightMargin;
         public long mDuration = 300;
@@ -112,7 +114,7 @@ public class FloatWindow {
         public PermissionListener mPermissionListener;
         public ViewStateListener mViewStateListener;
         public int mLayoutId;
-        private String mTag = DEFAULT_TAG;
+        private String mTag = FwContent.DEFAULT_TAG;
 
         @SuppressWarnings("unused")
         private Builder() {
@@ -142,14 +144,14 @@ public class FloatWindow {
             return this;
         }
 
-        public Builder setWidth(Screen screenType, float ratio) {
-            mWidth = (int) ((screenType == Screen.WIDTH ? ViewUtils.getScreenWidth(mApplicationContext)
+        public Builder setWidth(EScreen screenType, float ratio) {
+            mWidth = (int) ((screenType == EScreen.WIDTH ? ViewUtils.getScreenWidth(mApplicationContext)
                     : ViewUtils.getScreenHeight(mApplicationContext)) * ratio);
             return this;
         }
 
-        public Builder setHeight(Screen screenType, float ratio) {
-            mHeight = (int) ((screenType == Screen.WIDTH ? ViewUtils.getScreenWidth(mApplicationContext)
+        public Builder setHeight(EScreen screenType, float ratio) {
+            mHeight = (int) ((screenType == EScreen.WIDTH ? ViewUtils.getScreenWidth(mApplicationContext)
                     : ViewUtils.getScreenHeight(mApplicationContext)) * ratio);
             return this;
         }
@@ -164,14 +166,19 @@ public class FloatWindow {
             return this;
         }
 
-        public Builder setX(Screen screenType, float ratio) {
-            xOffset = (int) ((screenType == Screen.WIDTH ? ViewUtils.getScreenWidth(mApplicationContext)
+        public Builder setAutoRotate(boolean autoRotate) {
+            isAutoRotate = autoRotate;
+            return this;
+        }
+
+        public Builder setX(EScreen screenType, float ratio) {
+            xOffset = (int) ((screenType == EScreen.WIDTH ? ViewUtils.getScreenWidth(mApplicationContext)
                     : ViewUtils.getScreenHeight(mApplicationContext)) * ratio);
             return this;
         }
 
-        public Builder setY(Screen screenType, float ratio) {
-            yOffset = (int) ((screenType == Screen.WIDTH ? ViewUtils.getScreenWidth(mApplicationContext)
+        public Builder setY(EScreen screenType, float ratio) {
+            yOffset = (int) ((screenType == EScreen.WIDTH ? ViewUtils.getScreenWidth(mApplicationContext)
                     : ViewUtils.getScreenHeight(mApplicationContext)) * ratio);
             return this;
         }
@@ -188,18 +195,18 @@ public class FloatWindow {
             return this;
         }
 
-        public Builder setMoveType(MoveType moveType) {
+        public Builder setMoveType(EMoveType moveType) {
             return setMoveType(moveType, 0, 0);
         }
 
         /**
-         * 设置带边距的贴边动画，只有 moveType 为 MoveType.SLIDE，设置边距才有意义，这个方法不标准，后面调整
+         * 设置带边距的贴边动画，只有 moveType 为 EMoveType.SLIDE，设置边距才有意义，这个方法不标准，后面调整
          *
-         * @param moveType         贴边动画 MoveType.SLIDE
+         * @param moveType         贴边动画 EMoveType.SLIDE
          * @param slideLeftMargin  贴边动画左边距，默认为 0
          * @param slideRightMargin 贴边动画右边距，默认为 0
          */
-        public Builder setMoveType(MoveType moveType, int slideLeftMargin, int slideRightMargin) {
+        public Builder setMoveType(EMoveType moveType, int slideLeftMargin, int slideRightMargin) {
             mMoveType = moveType;
             mSlideLeftMargin = slideLeftMargin;
             mSlideRightMargin = slideRightMargin;
@@ -234,7 +241,7 @@ public class FloatWindow {
 
         public void build() {
             if (mFloatWindowMap == null) {
-                mFloatWindowMap = new HashMap<String, BaseFloatWindow>();
+                mFloatWindowMap = new HashMap<String, BaseFloatWindow>(16);
             }
             if (mFloatWindowMap.containsKey(mTag)) {
                 throw new IllegalArgumentException(
@@ -248,7 +255,8 @@ public class FloatWindow {
             }
             BaseFloatWindow floatWindowImpl = new IFloatWindowImpl(this);
             mFloatWindowMap.put(mTag, floatWindowImpl);
-            L.i("build [" + mTag + "] success. sdk version:" + VERSION);
+
+            L.i("build [" + mTag + "] success. sdk version:" + FwContent.VERSION);
         }
     }
 }

@@ -7,6 +7,7 @@ package com.yhao.floatwindow.enums;
  * @Create: Feb 19, 2019 11:25:37 AM
  * @Author: sanbo
  */
-public enum Screen {
-    WIDTH, HEIGHT
+public enum EScreen {
+    WIDTH,
+    HEIGHT
 }
