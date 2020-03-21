@@ -2,11 +2,14 @@ buildscript {
 
     repositories {
         maven { url 'http://maven.aliyun.com/nexus/content/groups/public/' }
+        maven { url 'https://dl.bintray.com/miqingtang/maven' }
         jcenter { url 'http://maven.aliyun.com/nexus/content/groups/public/' }
         google()
+        jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.5.1'
+        classpath 'com.android.tools.build:gradle:3.5.3'
+        classpath 'com.novoda:bintray-release:0.9.2'
     }
 }
 

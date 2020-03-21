@@ -42,6 +42,22 @@
 
 ### 2. 使用
 
+* 依赖集成，
+
+    1. 添加maven仓库：(后面会申请发布到公有仓库)
+    ```
+    repositories {
+        maven { url 'https://dl.bintray.com/miqingtang/maven' }
+    }
+    ```
+    2. 添加依赖
+    ```
+    dependencies {
+        implementation 'org.sdker.floatwindow:floatwindow:1.1.1'
+    }
+    ```
+    
+    
 * `Android studio`集成，直接使用编译成的aar包即可.AAR包路径 `floatwindow/build/outputs/aar/`
 
 * `eclipse`集成相对麻烦些: 将AAR解压开，将`classes.jar`修改名字拷贝到项目`libs`中;并在权限配置中集成权限和申请权限的页面即可

@@ -1,6 +1,7 @@
 apply plugin: 'com.android.library'
 
-def version = "v1.0.9.1";
+
+def version = "v1.1.0"
 android {
     compileSdkVersion 28
     buildToolsVersion "28.0.3"
@@ -82,3 +83,6 @@ task release(type: Copy, dependsOn: [releaseJar]) {
 }
 
 release.dependsOn build
+
+
+apply from: "maven.gradle"
