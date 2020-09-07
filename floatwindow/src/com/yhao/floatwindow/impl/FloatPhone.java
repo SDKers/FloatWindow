@@ -157,7 +157,11 @@ public class FloatPhone extends BaseFloatView {
             return;
         }
         mLayoutParams.x = mX = x;
-        mWindowManager.updateViewLayout(mView, mLayoutParams);
+        if (mView == null || mView.getParent() == null) {
+            mWindowManager.addView(mView, mLayoutParams);
+        } else {
+            mWindowManager.updateViewLayout(mView, mLayoutParams);
+        }
     }
 
     @Override
@@ -166,7 +170,11 @@ public class FloatPhone extends BaseFloatView {
             return;
         }
         mLayoutParams.y = mY = y;
-        mWindowManager.updateViewLayout(mView, mLayoutParams);
+        if (mView == null || mView.getParent() == null) {
+            mWindowManager.addView(mView, mLayoutParams);
+        } else {
+            mWindowManager.updateViewLayout(mView, mLayoutParams);
+        }
     }
 
     @Override
